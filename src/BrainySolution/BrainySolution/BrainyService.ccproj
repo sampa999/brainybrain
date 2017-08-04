@@ -8,10 +8,10 @@
     <ProjectGuid>9be3d0c0-46d7-4098-9c9d-350207ce2327</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BrainySolution</RootNamespace>
-    <AssemblyName>BrainySolution</AssemblyName>
+    <RootNamespace>BrainyService</RootNamespace>
+    <AssemblyName>BrainyService</AssemblyName>
     <StartDevelopmentStorage>True</StartDevelopmentStorage>
-    <Name>BrainySolution</Name>
+    <Name>BrainyService</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
