@@ -7,8 +7,10 @@ namespace NeuralNetworkTests
     public class NeuronUnitTests
     {
         [TestMethod]
-        public void TestMethod1()
+        public void CreateNeuron()
         {
+            var neuron = new NeuralNetwork.Neuron();
+
         }
     }
 }
