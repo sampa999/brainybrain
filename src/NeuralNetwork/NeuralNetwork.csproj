@@ -42,8 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Neuron.cs" />
-    <Compile Include="NeuronLink.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Synapse.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
