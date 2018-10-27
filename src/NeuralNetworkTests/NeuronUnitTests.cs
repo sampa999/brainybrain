@@ -9,7 +9,7 @@ namespace NeuralNetworkTests
         [TestMethod]
         public void CreateNeuron()
         {
-            var neuron = new NeuralNetwork.Neuron();
+            var neuron = new NeuralNetwork.Neuron(0, 0);
 
         }
     }
