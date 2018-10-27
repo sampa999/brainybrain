@@ -2,6 +2,7 @@
 
 namespace NeuralNetwork
 {
+    using System;
     using System.Collections.Generic;
 
     public class Neuron
@@ -10,6 +11,11 @@ namespace NeuralNetwork
             int threshold,
             int decayCycles)
         {
+            if (decayCycles < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(decayCycles), "must be greater than 0");
+            }
+
             IncomingNeurons = new List<Neuron>();
             OutputNeurons = new List<Neuron>();
             InputAccumulator = 0;
