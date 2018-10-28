@@ -16,45 +16,43 @@ namespace NeuralNetwork
                 throw new ArgumentOutOfRangeException(nameof(decayCycles), "must be greater than 0");
             }
 
-            IncomingNeurons = new List<Neuron>();
-            OutputNeurons = new List<Neuron>();
+            if (threshold < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(threshold), "must be greater than or equal to 0");
+            }
+
             InputAccumulator = 0;
             Threshold = threshold;
             DecayCycles = decayCycles;
+            OutputSignal = false;
         }
 
-        public readonly List<Neuron> IncomingNeurons;
-
-        public readonly List<Neuron> OutputNeurons;
-
-        public void InputTrigger(int value)
+        public void InputTrigger()
         {
-            InputAccumulator += value;
+            InputAccumulator++;
         }
 
         public void ProcessInputs()
         {
-
+            OutputSignal = InputAccumulator > Threshold;
+            InputAccumulator = 0;
         }
 
-        public void Fire()
-        {
-
-        }
+        public bool OutputSignal { get; private set; }
 
         /// <summary>
         /// This accumulates signals from the input neurons
         /// </summary>
-        private int InputAccumulator;
+        public int InputAccumulator { get; private set; }
 
         /// <summary>
         /// Once the InputAccumulator passes the Threshold, the Neuron fires
         /// </summary>
-        private int Threshold;
+        private readonly int Threshold;
 
         /// <summary>
         /// This is the number of cycles that it takes for one input to leak away
         /// </summary>
-        private int DecayCycles;
+        private readonly int DecayCycles;
     }
 }
