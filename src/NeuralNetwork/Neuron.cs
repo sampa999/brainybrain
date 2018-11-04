@@ -5,7 +5,7 @@ namespace NeuralNetwork
     using System;
     using System.Collections.Generic;
 
-    public class Neuron
+    public class Neuron : IInputNeuron, IOutputNeuron
     {
         public Neuron(
             int threshold,
@@ -25,6 +25,8 @@ namespace NeuralNetwork
             Threshold = threshold;
             DecayCycles = decayCycles;
             OutputSignal = false;
+
+            OutputNeurons = new List<IInputNeuron>();
         }
 
         public void InputTrigger()
@@ -36,6 +38,21 @@ namespace NeuralNetwork
         {
             OutputSignal = InputAccumulator > Threshold;
             InputAccumulator = 0;
+        }
+
+        public void AddNeuron(IInputNeuron neuron)
+        {
+            if (neuron == null)
+            {
+                throw new ArgumentNullException(nameof(neuron));
+            }
+
+            OutputNeurons.Add(neuron);
+        }
+
+        public void RemoveNeuron(IInputNeuron neuron)
+        {
+            throw new NotImplementedException();
         }
 
         public bool OutputSignal { get; private set; }
@@ -54,5 +71,10 @@ namespace NeuralNetwork
         /// This is the number of cycles that it takes for one input to leak away
         /// </summary>
         private readonly int DecayCycles;
+
+        /// <summary>
+        /// Collection of output neurons
+        /// </summary>
+        private readonly List<IInputNeuron> OutputNeurons;
     }
 }

@@ -40,5 +40,15 @@ namespace NeuralNetworkTests
             neuron.OutputSignal.Should().BeTrue();
         }
 
+        [TestMethod]
+        public void AddOutputNeuron()
+        {
+            var neuron = new NeuralNetwork.Neuron(0, 9999);
+            neuron.OutputSignal.Should().BeFalse();
+            var nextNeuron = new NeuralNetwork.Neuron(0, 9999);
+            nextNeuron.OutputSignal.Should().BeFalse();
+
+            neuron.AddNeuron(nextNeuron);
+        }
     }
 }
