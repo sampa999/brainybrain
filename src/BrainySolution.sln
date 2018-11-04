@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "BrainyService", "..\BrainyService\BrainyService.ccproj", "{9BE3D0C0-46D7-4098-9C9D-350207CE2327}"
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "BrainyService", "BrainyService\BrainyService.ccproj", "{9BE3D0C0-46D7-4098-9C9D-350207CE2327}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetwork", "..\NeuralNetwork\NeuralNetwork.csproj", "{496A8115-2C04-4A3D-B4C0-1FE217A42F60}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetwork", "NeuralNetwork\NeuralNetwork.csproj", "{496A8115-2C04-4A3D-B4C0-1FE217A42F60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetworkTests", "..\NeuralNetworkTests\NeuralNetworkTests.csproj", "{3A0B4F5B-F338-482D-A3EB-73DD623E3866}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetworkTests", "NeuralNetworkTests\NeuralNetworkTests.csproj", "{3A0B4F5B-F338-482D-A3EB-73DD623E3866}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontEnd", "FrontEnd\FrontEnd.csproj", "{9EA46E26-6190-46FF-A223-ADB4CE4613AC}"
 EndProject

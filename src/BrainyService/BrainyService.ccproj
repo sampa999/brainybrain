@@ -37,7 +37,7 @@
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Solution\FrontEnd\FrontEnd.csproj">
+    <ProjectReference Include="..\FrontEnd\FrontEnd.csproj">
       <Name>FrontEnd</Name>
       <Project>{9ea46e26-6190-46ff-a223-adb4ce4613ac}</Project>
       <Private>True</Private>
