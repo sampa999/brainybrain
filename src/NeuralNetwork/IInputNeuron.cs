@@ -11,6 +11,6 @@ namespace NeuralNetwork
     /// </summary>
     public interface IInputNeuron
     {
-        void InputTrigger();
+        void InputTrigger(bool inverted);
     }
 }

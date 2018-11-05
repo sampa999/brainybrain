@@ -9,7 +9,8 @@ namespace NeuralNetwork
     {
         public Neuron(
             int threshold,
-            int decayCycles)
+            int decayCycles,
+            bool inverted)
         {
             if (decayCycles < 1)
             {
@@ -29,18 +30,32 @@ namespace NeuralNetwork
             OutputNeurons = new List<IInputNeuron>();
         }
 
-        public void InputTrigger()
+        public void InputTrigger(bool inverted)
         {
-            InputAccumulator++;
+            if (inverted)
+            {
+                if (InputAccumulator > 0)
+                {
+                    InputAccumulator--;
+                }
+            }
+            else
+            {
+                InputAccumulator++;
+            }
         }
 
         public void ProcessInputs()
         {
             OutputSignal = InputAccumulator > Threshold;
-            InputAccumulator = 0;
+            if (OutputSignal)
+            {
+                InputAccumulator = 0;
+            }
         }
 
-        public void AddNeuron(IInputNeuron neuron)
+        public void AddNeuron(
+            IInputNeuron neuron)
         {
             if (neuron == null)
             {
@@ -76,5 +91,10 @@ namespace NeuralNetwork
         /// Collection of output neurons
         /// </summary>
         private readonly List<IInputNeuron> OutputNeurons;
+
+        /// <summary>
+        /// True if output is inverted
+        /// </summary>
+        private bool Inverted;
     }
 }

@@ -12,14 +12,14 @@ namespace NeuralNetwork
     public interface IOutputNeuron
     {
         /// <summary>
-        /// Add a neuron that will be triggered when we produce an output
+        /// Add a neuron that will be triggered when we produce an output.
         /// </summary>
-        /// 
+        /// <param name="neuron">Neuron to add</param>
         void AddNeuron(IInputNeuron neuron);
 
         /// <summary>
         /// Removes a neuron that was previously added. If it doesn't exist, it just returns.
-        /// </summary>
+        /// </summary>Add a neuron that will be triggered when we produce an output
         /// <param name="neuron"></param>
         void RemoveNeuron(IInputNeuron neuron);
     }
