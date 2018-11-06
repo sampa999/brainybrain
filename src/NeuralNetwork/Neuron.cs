@@ -5,12 +5,11 @@ namespace NeuralNetwork
     using System;
     using System.Collections.Generic;
 
-    public class Neuron : IInputNeuron, IOutputNeuron
+    public class Neuron 
     {
         public Neuron(
             int threshold,
-            int decayCycles,
-            bool inverted)
+            int decayCycles)
         {
             if (decayCycles < 1)
             {
@@ -27,13 +26,15 @@ namespace NeuralNetwork
             DecayCycles = decayCycles;
             OutputSignal = false;
 
-            OutputNeurons = new List<IInputNeuron>();
+            OutputNeurons = new List<Neuron>();
+            InvertedOutputNeurons = new List<Neuron>();
         }
 
         public void InputTrigger(bool inverted)
         {
             if (inverted)
             {
+                // Don't go negative. Just seems bad.
                 if (InputAccumulator > 0)
                 {
                     InputAccumulator--;
@@ -55,19 +56,42 @@ namespace NeuralNetwork
         }
 
         public void AddNeuron(
-            IInputNeuron neuron)
+            Neuron neuron,
+            bool inverted)
         {
             if (neuron == null)
             {
                 throw new ArgumentNullException(nameof(neuron));
             }
 
-            OutputNeurons.Add(neuron);
+            if (inverted)
+            {
+                InvertedOutputNeurons.Add(neuron);
+            }
+            else
+            {
+                OutputNeurons.Add(neuron);
+            }
         }
 
-        public void RemoveNeuron(IInputNeuron neuron)
+        public void RemoveNeuron(Neuron neuron)
         {
             throw new NotImplementedException();
+        }
+
+        public void Fire()
+        {
+            if (OutputSignal)
+            {
+                foreach (var neuron in OutputNeurons)
+                {
+                    neuron.InputTrigger(false);
+                }
+                foreach (var neuron in InvertedOutputNeurons)
+                {
+                    neuron.InputTrigger(true);
+                }
+            }
         }
 
         public bool OutputSignal { get; private set; }
@@ -90,11 +114,11 @@ namespace NeuralNetwork
         /// <summary>
         /// Collection of output neurons
         /// </summary>
-        private readonly List<IInputNeuron> OutputNeurons;
+        private readonly List<Neuron> OutputNeurons;
 
         /// <summary>
-        /// True if output is inverted
+        /// Collection of out neurons with inverted signal
         /// </summary>
-        private bool Inverted;
+        private readonly List<Neuron> InvertedOutputNeurons;
     }
 }
