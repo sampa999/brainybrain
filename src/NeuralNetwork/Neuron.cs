@@ -30,7 +30,7 @@ namespace NeuralNetwork
             InvertedOutputNeurons = new List<Neuron>();
         }
 
-        public void InputTrigger(bool inverted)
+        public void InputTrigger(bool inverted = false)
         {
             if (inverted)
             {
