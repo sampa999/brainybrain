@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork
 {
-    public class NeuronCollection
+    public class NeuronModule
     {
-        public NeuronCollection()
+        public NeuronModule()
         {
             neurons = new List<Neuron>();
-            neuronCollections = new List<NeuronCollection>();
+            neuronCollections = new List<NeuronModule>();
         }
 
         public void Process()
@@ -47,6 +47,6 @@ namespace NeuralNetwork
         }
 
         public readonly List<Neuron> neurons;
-        public readonly List<NeuronCollection> neuronCollections;
+        public readonly List<NeuronModule> neuronCollections;
     }
 }

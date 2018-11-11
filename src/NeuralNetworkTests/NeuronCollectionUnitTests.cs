@@ -63,7 +63,7 @@ namespace NeuralNetworkTests
         [TestMethod]
         public void ConstructNeuronCollection()
         {
-            var neuronCollection = new NeuronCollection();
+            var neuronCollection = new NeuronModule();
             neuronCollection.Should().NotBeNull();
             neuronCollection.neurons.Should().BeEmpty();
         }
@@ -71,7 +71,7 @@ namespace NeuralNetworkTests
         [TestMethod]
         public void RunEmptyNeuronCollection()
         {
-            var neuronCollection = new NeuronCollection();
+            var neuronCollection = new NeuronModule();
             neuronCollection.Process();
             neuronCollection.Fire();
         }
@@ -79,8 +79,8 @@ namespace NeuralNetworkTests
         [TestMethod]
         public void RunOneElementNeuronCollection()
         {
-            var neuronCollection = new NeuronCollection();
-            var neuron = new Neuron(0, 99999);
+            var neuronCollection = new NeuronModule();
+            var neuron = new Neuron(0, 99999, 0);
             neuronCollection.neurons.Add(neuron);
             neuron.OutputSignal.Should().BeFalse();
             neuron.InputTrigger();

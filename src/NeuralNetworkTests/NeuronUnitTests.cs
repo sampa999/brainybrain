@@ -10,29 +10,43 @@ namespace NeuralNetworkTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void CreateNeuronWithInvalidThreshold()
+        {
+            var neuron = new NeuralNetwork.Neuron(-1, 1, 0);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void CreateNeuronWithInvalidDecayCycles()
         {
-            var neuron = new NeuralNetwork.Neuron(1, 0);
+            var neuron = new NeuralNetwork.Neuron(1, 0, 0);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void CreateNeuronWithInvalidRefractoryPeriod()
+        {
+            var neuron = new NeuralNetwork.Neuron(1, 1, -1);
         }
 
         [TestMethod]
         public void CreateNeuronWithValidParameters()
         {
-            var neuron = new NeuralNetwork.Neuron(1, 1);
+            var neuron = new NeuralNetwork.Neuron(1, 1, 0);
             neuron.Should().NotBeNull();
         }
 
         [TestMethod]
         public void  SingleNeuronDoesntFireWithNoInput()
         {
-            var neuron = new NeuralNetwork.Neuron(1, 9999);
+            var neuron = new NeuralNetwork.Neuron(1, 9999, 0);
             neuron.OutputSignal.Should().BeFalse();
         }
 
         [TestMethod]
         public void SingleNeuronFiresWithInput()
         {
-            var neuron = new NeuralNetwork.Neuron(0, 9999);
+            var neuron = new NeuralNetwork.Neuron(0, 9999, 0);
             neuron.OutputSignal.Should().BeFalse();
             neuron.InputTrigger(false);
             neuron.OutputSignal.Should().BeFalse();
@@ -43,9 +57,9 @@ namespace NeuralNetworkTests
         [TestMethod]
         public void AddOutputNeuron()
         {
-            var neuron = new NeuralNetwork.Neuron(0, 9999);
+            var neuron = new NeuralNetwork.Neuron(0, 9999, 0);
             neuron.OutputSignal.Should().BeFalse();
-            var nextNeuron = new NeuralNetwork.Neuron(0, 9999);
+            var nextNeuron = new NeuralNetwork.Neuron(0, 9999, 0);
             nextNeuron.OutputSignal.Should().BeFalse();
 
             neuron.AddNeuron(nextNeuron, false);
@@ -58,9 +72,9 @@ namespace NeuralNetworkTests
         [TestMethod]
         public void TwoNeuronChain()
         {
-            var neuron = new NeuralNetwork.Neuron(0, 9999);
+            var neuron = new NeuralNetwork.Neuron(0, 9999, 0);
             neuron.OutputSignal.Should().BeFalse();
-            var nextNeuron = new NeuralNetwork.Neuron(0, 9999);
+            var nextNeuron = new NeuralNetwork.Neuron(0, 9999, 0);
             nextNeuron.OutputSignal.Should().BeFalse();
 
             neuron.AddNeuron(nextNeuron, false);

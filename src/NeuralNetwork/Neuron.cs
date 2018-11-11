@@ -9,22 +9,30 @@ namespace NeuralNetwork
     {
         public Neuron(
             int threshold,
-            int decayCycles)
+            int decayCycles,
+            int refractoryPeriod)
         {
-            if (decayCycles < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(decayCycles), "must be greater than 0");
-            }
-
             if (threshold < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(threshold), "must be greater than or equal to 0");
             }
 
+            if (decayCycles < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(decayCycles), "must be greater than 0");
+            }
+
+            if (refractoryPeriod < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(refractoryPeriod), "must be greater than or equal to 0");
+            }
+
             InputAccumulator = 0;
             Threshold = threshold;
             DecayCycles = decayCycles;
+            RefractoryPeriod = refractoryPeriod;
             OutputSignal = false;
+            RefractoryCyclesLeft = 0;
 
             OutputNeurons = new List<Neuron>();
             InvertedOutputNeurons = new List<Neuron>();
@@ -102,9 +110,20 @@ namespace NeuralNetwork
         public int InputAccumulator { get; private set; }
 
         /// <summary>
+        /// Number of cycles left in the current refractory period
+        /// </summary>
+        public int RefractoryCyclesLeft { get; private set; }
+
+        /// <summary>
         /// Once the InputAccumulator passes the Threshold, the Neuron fires
         /// </summary>
         private readonly int Threshold;
+
+        /// <summary>
+        /// The number of cycles that the neuron will remain in a non-responsive refractory
+        /// period after firing.
+        /// </summary>
+        private readonly int RefractoryPeriod;
 
         /// <summary>
         /// This is the number of cycles that it takes for one input to leak away
