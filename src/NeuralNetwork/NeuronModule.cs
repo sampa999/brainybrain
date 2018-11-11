@@ -11,14 +11,14 @@ namespace NeuralNetwork
         public NeuronModule()
         {
             neurons = new List<Neuron>();
-            neuronCollections = new List<NeuronModule>();
+            neuronModules = new List<NeuronModule>();
         }
 
         public void Process()
         {
-            foreach (var neuronCollection in neuronCollections)
+            foreach (var neuronModule in neuronModules)
             {
-                neuronCollection.Process();
+                neuronModule.Process();
             }
 
             foreach (var neuron in neurons)
@@ -29,9 +29,9 @@ namespace NeuralNetwork
 
         public void Fire()
         {
-            foreach (var neuronCollection in neuronCollections)
+            foreach (var neuronModule in neuronModules)
             {
-                neuronCollection.Fire();
+                neuronModule.Fire();
             }
 
             foreach (var neuron in neurons)
@@ -47,6 +47,6 @@ namespace NeuralNetwork
         }
 
         public readonly List<Neuron> neurons;
-        public readonly List<NeuronModule> neuronCollections;
+        public readonly List<NeuronModule> neuronModules;
     }
 }

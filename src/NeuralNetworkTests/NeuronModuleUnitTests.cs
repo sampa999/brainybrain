@@ -8,12 +8,12 @@ using FluentAssertions;
 namespace NeuralNetworkTests
 {
     /// <summary>
-    /// Summary description for NeuronCollectionUnitTests
+    /// Summary description for NeuronModuleUnitTests
     /// </summary>
     [TestClass]
-    public class NeuronCollectionUnitTests
+    public class NeuronModuleUnitTests
     {
-        public NeuronCollectionUnitTests()
+        public NeuronModuleUnitTests()
         {
             //
             // TODO: Add constructor logic here
@@ -61,30 +61,30 @@ namespace NeuralNetworkTests
         #endregion
 
         [TestMethod]
-        public void ConstructNeuronCollection()
+        public void ConstructNeuronModule()
         {
-            var neuronCollection = new NeuronModule();
-            neuronCollection.Should().NotBeNull();
-            neuronCollection.neurons.Should().BeEmpty();
+            var neuronModule = new NeuronModule();
+            neuronModule.Should().NotBeNull();
+            neuronModule.neurons.Should().BeEmpty();
         }
 
         [TestMethod]
-        public void RunEmptyNeuronCollection()
+        public void RunEmptyNeuronModule()
         {
-            var neuronCollection = new NeuronModule();
-            neuronCollection.Process();
-            neuronCollection.Fire();
+            var neuronModule = new NeuronModule();
+            neuronModule.Process();
+            neuronModule.Fire();
         }
 
         [TestMethod]
-        public void RunOneElementNeuronCollection()
+        public void RunOneElementNeuronModule()
         {
-            var neuronCollection = new NeuronModule();
+            var neuronModule = new NeuronModule();
             var neuron = new Neuron(0, 99999, 0);
-            neuronCollection.neurons.Add(neuron);
+            neuronModule.neurons.Add(neuron);
             neuron.OutputSignal.Should().BeFalse();
             neuron.InputTrigger();
-            neuronCollection.Run();
+            neuronModule.Run();
             neuron.OutputSignal.Should().BeTrue();
         }
     }

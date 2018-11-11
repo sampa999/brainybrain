@@ -62,7 +62,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NeuronCollectionUnitTests.cs" />
+    <Compile Include="NeuronModuleUnitTests.cs" />
     <Compile Include="NeuronUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
