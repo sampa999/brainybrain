@@ -58,10 +58,10 @@ namespace SDKTemplate
         private void CalculateBottomTriangles()
         {
             var trapezoid = new Trapezoid3d(
-                InnerRight.Add(0, 0, Height),
-                InnerLeft.Add(0, 0, Height),
-                OuterLeft.Add(0, 0, Height),
-                OuterRight.Add(0, 0, Height)
+                InnerRight,
+                InnerLeft,
+                OuterLeft,
+                OuterRight
                 );
 
              BottomTriangles = trapezoid.Triangles;

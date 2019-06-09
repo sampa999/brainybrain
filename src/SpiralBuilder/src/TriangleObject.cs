@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,8 @@ namespace SDKTemplate
                 for (var vIndex = 0; vIndex < 3; vIndex++)
                 {
                     var index = Array.BinarySearch(Vertices, triangles[i].Vertices[vIndex]);
+                    var index2 = FindPointInArray(Vertices, triangles[i].Vertices[vIndex]);
+                    Debug.Assert(index == index2);
                     if (index < 0)
                     {
                         throw new Exception("Unable to locate vertex in Vertices list");
@@ -46,6 +49,19 @@ namespace SDKTemplate
                     Triangles[i].Vertex[vIndex] = index;
                 }
             }
+        }
+
+        private int FindPointInArray(Point3d[] pArray, Point3d p)
+        {
+            for (var i=0; i<pArray.Length; i++)
+            {
+                if (p.X == pArray[i].X && p.Y == pArray[i].Y && p.Z == pArray[i].Z)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
 
         private void ExtractVertices(IEnumerable<Triangle3d>  triangles)

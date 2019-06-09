@@ -10,6 +10,7 @@
 //*********************************************************
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -485,15 +486,91 @@ namespace SDKTemplate
             package.ModelPart = await StringToStreamAsync(xmldoc.ToString());
         }
 
+        private async Task SaveMeshToFile(Printing3DMesh mesh, Printing3DMeshVerificationResult res = null)
+        {
+            rootPage.NotifyUser("", NotifyType.StatusMessage);
+
+            FileSavePicker savePicker = new FileSavePicker
+            {
+                DefaultFileExtension = ".txt",
+                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+            };
+
+            savePicker.FileTypeChoices.Add("Txt File", new[] { ".txt" });
+            var storageFile = await savePicker.PickSaveFileAsync();
+
+            var f = new StreamWriter(await storageFile.OpenStreamForWriteAsync());
+
+            if (res != null)
+            {
+                await f.WriteLineAsync("NonmanifoldTriangles");
+                foreach (var t in res.NonmanifoldTriangles)
+                {
+                    await f.WriteLineAsync($"  {t}");
+                }
+                await f.WriteLineAsync("ReversedNormalTriangles");
+                foreach (var t in res.ReversedNormalTriangles)
+                {
+                    await f.WriteLineAsync($"  {t}");
+                }
+            }
+
+            await f.WriteLineAsync($"Vertex Count - {mesh.VertexCount}");
+
+            using (var stream = mesh.GetVertexPositions().AsStream())
+            {
+                var vertexBufferSize = sizeof(double) * mesh.VertexPositionsDescription.Stride * mesh.VertexCount;
+                byte[] vertexData = new byte[vertexBufferSize];
+                await stream.ReadAsync(vertexData, 0, vertexData.Length);
+                var vertices = new double[mesh.VertexCount * 3];
+                for (var i=0; i<mesh.VertexCount*3; i++)
+                {
+                    vertices[i] = BitConverter.ToDouble(vertexData, sizeof(double) * i);
+                }
+                for (var i=0; i<mesh.VertexCount; i++)
+                {
+                    await f.WriteLineAsync($"  {i} - {vertices[3 * i]}, {vertices[3 * i + 1]}, {vertices[3 * i + 2]}");
+                }
+            }
+
+            f.WriteLine($"Triangle Count - {mesh.IndexCount}");
+            using (var stream = mesh.GetTriangleIndices().AsStream())
+            {
+                var triangleBufferSize = sizeof(UInt32) * 3 * mesh.IndexCount;
+                byte[] triangleData = new byte[triangleBufferSize];
+                await stream.ReadAsync(triangleData, 0, triangleData.Length);
+                uint[] triangleVertices = new uint[3 * mesh.IndexCount];
+                int triangleDataOffset = 0;
+                for (var i = 0; i < mesh.IndexCount; i++)
+                {
+                    Debug.Assert(triangleDataOffset < triangleData.Length);
+                    Debug.Assert(3 * i < triangleVertices.Length);
+                    triangleVertices[3 * i] = BitConverter.ToUInt32(triangleData, triangleDataOffset);
+                    triangleDataOffset += sizeof(uint);
+                    Debug.Assert(3 * i + 1 < triangleVertices.Length);
+                    triangleVertices[3 * i + 1] = BitConverter.ToUInt32(triangleData, triangleDataOffset);
+                    triangleDataOffset += sizeof(uint);
+                    Debug.Assert(3 * i + 2 < triangleVertices.Length);
+                    triangleVertices[3 * i + 2] = BitConverter.ToUInt32(triangleData, triangleDataOffset);
+                    triangleDataOffset += sizeof(uint);
+                }
+                for (var i=0; i<mesh.IndexCount; i++)
+                {
+                    await f.WriteLineAsync($"  {i} - {triangleVertices[3 * i]}, {triangleVertices[3 * i + 1]}, {triangleVertices[3 * i + 2]}");
+                }
+            }
+            await f.FlushAsync();
+        }
+
         private async void CreateSpiralProgrammatically(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             double startingCenterWidth = 100;
             double surfaceWidth = 20;
-            int angleStep = 90;
-            double spiralRatio = 1.0;
-            int totalAngle = 90;
-            double surfaceHeight = 10;
-            double dropAmount = 0;
+            int angleStep = 1;
+            double spiralRatio = 0.9;
+            int totalAngle = 360 * 3;
+            double surfaceHeight = 5;
+            double dropAmount = 30;
 
             var spiralBuilder = new SpiralBuilder(
                 startingCenterWidth,
@@ -571,42 +648,17 @@ namespace SDKTemplate
 
             if (!res.IsValid)
             {
-                rootPage.NotifyUser("", NotifyType.StatusMessage);
-
-                FileSavePicker savePicker = new FileSavePicker();
-                savePicker.DefaultFileExtension = ".txt";
-                savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-                savePicker.FileTypeChoices.Add("Txt File", new[] { ".txt" });
-                var storageFile = await savePicker.PickSaveFileAsync();
-
-                var f = new StreamWriter(await storageFile.OpenStreamForWriteAsync());
-                f.WriteLine("NonmanifoldTriangles");
-
-                uint index = 0;
-
-                for (var i = 0; i < res.NonmanifoldTriangles.Count; i++)
-                {
-                    index = res.NonmanifoldTriangles[i];
-                    var t = triangleObject.Triangles[index];
-                    f.Write($"{triangleObject.Vertices[t.Vertex[0]]}, ");
-                    f.Write($"{triangleObject.Vertices[t.Vertex[1]]}, ");
-                    f.WriteLine($"{triangleObject.Vertices[t.Vertex[2]]}, ");
-                }
-
-                f.WriteLine("ReversedNormalTriangles");
-                for (var i = 0; i < res.ReversedNormalTriangles.Count; i++)
-                {
-                    index = res.ReversedNormalTriangles[i];
-                    var t = triangleObject.Triangles[index];
-                    f.Write($"{triangleObject.Vertices[t.Vertex[0]]}, ");
-                    f.Write($"{triangleObject.Vertices[t.Vertex[1]]}, ");
-                    f.WriteLine($"{triangleObject.Vertices[t.Vertex[2]]}, ");
-                }
-                f.Flush();
+                await SaveMeshToFile(mesh, res);
             }
 
             // add the mesh to the model
             model.Meshes.Add(mesh);
+
+            if (!res.IsValid)
+            {
+                await model.RepairAsync();
+                await SaveMeshToFile(model.Meshes[0]);
+            }
 
             // create a component.
             Printing3DComponent component = new Printing3DComponent
