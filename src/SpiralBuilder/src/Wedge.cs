@@ -45,19 +45,19 @@ namespace SDKTemplate
 
         private void CalculateTopTriangles()
         {
-            var trapezoid = new Trapezoid3d(
+            var trapezoid = new Polygon3d(
                 InnerLeft.Add(0, 0, Height),
                 InnerRight.Add(0, 0, Height),
                 OuterRight.Add(0, 0, Height),
                 OuterLeft.Add(0, 0, Height)
                 );
 
-            TopTrapezoids = new Trapezoid3d[] { trapezoid };
+            TopTrapezoids = new Polygon3d[] { trapezoid };
         }
 
         private void CalculateBottomTriangles()
         {
-            var trapezoid = new Trapezoid3d(
+            var trapezoid = new Polygon3d(
                 InnerRight,
                 InnerLeft,
                 OuterLeft,
@@ -69,7 +69,7 @@ namespace SDKTemplate
 
         private void CalculateLeftTriangles()
         {
-            var trapezoid = new Trapezoid3d(
+            var trapezoid = new Polygon3d(
                 InnerLeft,
                 InnerLeft.Add(0, 0, Height),
                 OuterLeft.Add(0, 0, Height),
@@ -81,7 +81,7 @@ namespace SDKTemplate
 
         private void CalculateRightTriangles()
         {
-            var trapezoid = new Trapezoid3d(
+            var trapezoid = new Polygon3d(
                 InnerRight.Add(0, 0, Height),
                 InnerRight,
                 OuterRight,
@@ -93,7 +93,7 @@ namespace SDKTemplate
 
         private void CalculateInsideTriangles()
         {
-            var trapezoid = new Trapezoid3d(
+            var trapezoid = new Polygon3d(
                 InnerLeft,
                 InnerRight,
                 InnerRight.Add(0, 0, Height),
@@ -105,7 +105,7 @@ namespace SDKTemplate
 
         private void CalculateOutsideTriangles()
         {
-            var trapezoid = new Trapezoid3d(
+            var trapezoid = new Polygon3d(
                 OuterRight,
                 OuterLeft,
                 OuterLeft.Add(0, 0, Height),
@@ -115,7 +115,7 @@ namespace SDKTemplate
             OutsideTriangles = trapezoid.Triangles;
         }
 
-        public Trapezoid3d[] TopTrapezoids { get; private set; }
+        public Polygon3d[] TopTrapezoids { get; private set; }
         public Triangle3d[] TopTriangles
         {
             get

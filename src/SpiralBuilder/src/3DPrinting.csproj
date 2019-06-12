@@ -107,7 +107,7 @@
       <DependentUpon>Scenario2_Launch.xaml</DependentUpon>
     </Compile>
     <Compile Include="SpiralBuilder.cs" />
-    <Compile Include="Trapezoid3d.cs" />
+    <Compile Include="Polygon3d.cs" />
     <Compile Include="Triangle3d.cs" />
     <Compile Include="TriangleObject.cs" />
     <Compile Include="Wedge.cs" />
