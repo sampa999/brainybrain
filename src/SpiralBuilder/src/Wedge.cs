@@ -46,13 +46,13 @@ namespace SDKTemplate
         private void CalculateTopTriangles()
         {
             var trapezoid = new Trapezoid3d(
-                InnerLeft.Add(0,0,Height),
+                InnerLeft.Add(0, 0, Height),
                 InnerRight.Add(0, 0, Height),
-                OuterRight.Add(0,0,Height),
+                OuterRight.Add(0, 0, Height),
                 OuterLeft.Add(0, 0, Height)
                 );
 
-            TopTriangles = trapezoid.Triangles;
+            TopTrapezoids = new Trapezoid3d[] { trapezoid };
         }
 
         private void CalculateBottomTriangles()
@@ -64,7 +64,7 @@ namespace SDKTemplate
                 OuterRight
                 );
 
-             BottomTriangles = trapezoid.Triangles;
+            BottomTriangles = trapezoid.Triangles;
         }
 
         private void CalculateLeftTriangles()
@@ -115,7 +115,14 @@ namespace SDKTemplate
             OutsideTriangles = trapezoid.Triangles;
         }
 
-        public Triangle3d[] TopTriangles { get; private set; }
+        public Trapezoid3d[] TopTrapezoids { get; private set; }
+        public Triangle3d[] TopTriangles
+        {
+            get
+            {
+                return TopTrapezoids.SelectMany(T => T.Triangles).ToArray();
+            }
+        }
         public Triangle3d[] BottomTriangles { get; private set; }
         public Triangle3d[] LeftTriangles { get; private set; }
         public Triangle3d[] RightTriangles { get; private set; }
