@@ -10,43 +10,45 @@ namespace SDKTemplate
     {
         public const double AllowedError = 0.00000001;
 
-        private double StartingCenterWidthMM { get; set; }
+        private double StartingCenterRadius { get; set; }
         private int AngleStepDegrees { get; set; }
-        private double SurfaceWidthMM { get; set; }
+        private double SurfaceWidth { get; set; }
         private double SpiralRatio { get; set; }
         private double SpiralDelta { get; set; }
         private int TotalAngleDegrees { get; set; }
-        private double SurfaceHeightMM { get; set; }
-        private double DropAmountMM { get; set; }
+        private double SurfaceHeight { get; set; }
+        private double DropAmount { get; set; }
         /// <summary>
         /// This creates a 3d model of a spiral ramp
         /// </summary>
-        /// <param name="startingCenterWidth">Distance from center of ramp to inner edge of platform</param>
+        /// <param name="startingCenterRadius">Distance from center of ramp to inner edge of platform</param>
         /// <param name="surfaceWidth">Width of platform</param>
         /// <param name="angleStep">Degrees to move for each step in the spiral. Smaller is smoother.</param>
         /// <param name="fullSpiralRatio">Proportional amount to shrink the center 'hole' per 360 </param>
         /// <param name="fullSpiralDelta">Absolute amount to shrink the center 'hole' per 360</param>
         /// <param name="totalAngle">Total amount to spiral. 360 is a full circle around.</param>
         /// <param name="surfaceHeight">Height of the surface ramp</param>
+        /// <param name="surfaceTiltAngle">Tilt of the spiral surface in degrees</param>
         /// <param name="dropAmount">Amount to drop the ramp per full revolution</param>
         public SpiralBuilder(
-            double startingCenterWidth,
+            double startingCenterRadius,
             double surfaceWidth,
             int angleStep,
             double fullSpiralRatio,
             double fullSpiralDelta,
             int totalAngle,
             double surfaceHeight,
+            int surfaceTiltAngle,
             double dropAmount)
         {
-            StartingCenterWidthMM = startingCenterWidth;
-            SurfaceWidthMM = surfaceWidth;
+            StartingCenterRadius = startingCenterRadius;
+            SurfaceWidth = surfaceWidth;
             AngleStepDegrees = angleStep;
             SpiralRatio = CalculateStepSpiralRatio(fullSpiralRatio);
             SpiralDelta = fullSpiralDelta * angleStep / (double) 360.0;
             TotalAngleDegrees = totalAngle;
-            SurfaceHeightMM = surfaceHeight;
-            DropAmountMM = dropAmount;
+            SurfaceHeight = surfaceHeight;
+            DropAmount = dropAmount;
 
             CalculateWedges();
             ExtractTriangles();
@@ -107,32 +109,32 @@ namespace SDKTemplate
             Wedges = new List<Wedge>();
 
             double currentHeight = 0;
-            double heightStepPerAngleStep = DropAmountMM * AngleStepDegrees / (double) 360.0;
-            var centerWidthMM = StartingCenterWidthMM;
+            double heightStepPerAngleStep = DropAmount * AngleStepDegrees / (double) 360.0;
+            var centerRadius = StartingCenterRadius;
             var innerLeft = new Point3d (
-                centerWidthMM * Math.Sin(0),
-                centerWidthMM * Math.Cos(0),
+                centerRadius * Math.Sin(0),
+                centerRadius * Math.Cos(0),
                 currentHeight);
             var outerLeft = new Point3d(
-                (centerWidthMM + SurfaceWidthMM) * Math.Sin(0),
-                (centerWidthMM + SurfaceWidthMM) * Math.Cos(0),
+                (centerRadius + SurfaceWidth) * Math.Sin(0),
+                (centerRadius + SurfaceWidth) * Math.Cos(0),
                 currentHeight);
 
             for (var angle=AngleStepDegrees; angle <= TotalAngleDegrees; angle += AngleStepDegrees)
             {
-                centerWidthMM -= SpiralDelta;
-                centerWidthMM *= SpiralRatio;
+                centerRadius -= SpiralDelta;
+                centerRadius *= SpiralRatio;
                 currentHeight -= heightStepPerAngleStep;
                 var innerRight = new Point3d(
-                    centerWidthMM * Math.Sin((double) angle * Math.PI / 180.0),
-                    centerWidthMM * Math.Cos((double) angle * Math.PI / 180.0),
+                    centerRadius * Math.Sin((double) angle * Math.PI / 180.0),
+                    centerRadius * Math.Cos((double) angle * Math.PI / 180.0),
                     currentHeight);
                 var outerRight = new Point3d(
-                    (centerWidthMM + SurfaceWidthMM) * Math.Sin((double)angle * Math.PI / 180.0),
-                    (centerWidthMM + SurfaceWidthMM) * Math.Cos((double)angle * Math.PI / 180.0),
+                    (centerRadius + SurfaceWidth) * Math.Sin((double)angle * Math.PI / 180.0),
+                    (centerRadius + SurfaceWidth) * Math.Cos((double)angle * Math.PI / 180.0),
                     currentHeight);
 
-                Wedges.Add(new Wedge(innerLeft, innerRight, outerLeft, outerRight, SurfaceHeightMM));
+                Wedges.Add(new Wedge(innerLeft, innerRight, outerLeft, outerRight, SurfaceHeight));
                 outerLeft = outerRight;
                 innerLeft = innerRight;
             }

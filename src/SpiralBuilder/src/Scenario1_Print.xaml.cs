@@ -564,7 +564,7 @@ namespace SDKTemplate
 
         private async void CreateSpiralProgrammatically(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            double startingCenterWidth = 100;
+            double startingCenterRadius = 100;
             double surfaceWidth = 5;
             int angleStep = 1;
             double spiralRatio = 1.0;
@@ -574,7 +574,7 @@ namespace SDKTemplate
             double dropAmount = 0;
 
             var spiralBuilder = new SpiralBuilder(
-                startingCenterWidth,
+                startingCenterRadius,
                 surfaceWidth,
                 angleStep,
                 spiralRatio,
