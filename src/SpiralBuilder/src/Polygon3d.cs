@@ -13,33 +13,26 @@ namespace SDKTemplate
     public class Polygon3d
     {
         public Point3d[] Vertices;
-        private Polygon3d()
+
+        public Polygon3d(params Point3d[] v)
         {
+            Vertices = v;
+            CalculateTriangles();
         }
 
-        public Polygon3d(Point3d v0, Point3d v1, Point3d v2, Point3d v3) : base()
+        private void CalculateTriangles()
         {
-            Vertices = new Point3d[4];
-            Triangles = new Triangle3d[2];
+            var vertexList = new List<Point3d>();
+            vertexList.AddRange(Vertices);
+            var triangleList = new List<Triangle3d>();
+            while (vertexList.Count > 3)
+            {
+                triangleList.Add(new Triangle3d(vertexList[0], vertexList[1], vertexList[2]));
+                vertexList.RemoveAt(1);
+            }
+            triangleList.Add(new Triangle3d(vertexList[0], vertexList[1], vertexList[2]));
 
-            Vertices[0] = v0;
-            Vertices[1] = v1;
-            Vertices[2] = v2;
-            Vertices[3] = v3;
-            Triangles[0] = new Triangle3d(v0, v1, v3);
-            Triangles[1] = new Triangle3d(v1, v2, v3);
-        }
-
-        public Polygon3d(IEnumerable<Point3d> v) : base()
-        {
-            var vertices = new List<Point3d>();
-            vertices.AddRange(v);
-            Vertices = vertices.ToArray();
-
-            Triangles = new Triangle3d[2];
-
-            Triangles[0] = new Triangle3d(Vertices[0], Vertices[1], Vertices[3]);
-            Triangles[1] = new Triangle3d(Vertices[1], Vertices[2], Vertices[3]);
+            Triangles = triangleList.ToArray();
         }
 
         public Triangle3d[] Triangles { get; private set; }

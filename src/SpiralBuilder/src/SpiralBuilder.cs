@@ -14,6 +14,7 @@ namespace SDKTemplate
         private int AngleStepDegrees { get; set; }
         private double SurfaceWidthMM { get; set; }
         private double SpiralRatio { get; set; }
+        private double SpiralDelta { get; set; }
         private int TotalAngleDegrees { get; set; }
         private double SurfaceHeightMM { get; set; }
         private double DropAmountMM { get; set; }
@@ -23,7 +24,8 @@ namespace SDKTemplate
         /// <param name="startingCenterWidth">Distance from center of ramp to inner edge of platform</param>
         /// <param name="surfaceWidth">Width of platform</param>
         /// <param name="angleStep">Degrees to move for each step in the spiral. Smaller is smoother.</param>
-        /// <param name="spiralRatio">Amount to shrink the center 'hole' per 360 </param>
+        /// <param name="fullSpiralRatio">Proportional amount to shrink the center 'hole' per 360 </param>
+        /// <param name="fullSpiralDelta">Absolute amount to shrink the center 'hole' per 360</param>
         /// <param name="totalAngle">Total amount to spiral. 360 is a full circle around.</param>
         /// <param name="surfaceHeight">Height of the surface ramp</param>
         /// <param name="dropAmount">Amount to drop the ramp per full revolution</param>
@@ -32,6 +34,7 @@ namespace SDKTemplate
             double surfaceWidth,
             int angleStep,
             double fullSpiralRatio,
+            double fullSpiralDelta,
             int totalAngle,
             double surfaceHeight,
             double dropAmount)
@@ -40,6 +43,7 @@ namespace SDKTemplate
             SurfaceWidthMM = surfaceWidth;
             AngleStepDegrees = angleStep;
             SpiralRatio = CalculateStepSpiralRatio(fullSpiralRatio);
+            SpiralDelta = fullSpiralDelta * angleStep / (double) 360.0;
             TotalAngleDegrees = totalAngle;
             SurfaceHeightMM = surfaceHeight;
             DropAmountMM = dropAmount;
@@ -50,6 +54,10 @@ namespace SDKTemplate
 
         private double CalculateStepSpiralRatio(double fullSpiralRatio)
         {
+            if (fullSpiralRatio == 1.0)
+            {
+                return 1.0;
+            }
             double lowGuess = 0;
             double highGuess = 1;
             double power = ((double)360) / AngleStepDegrees;
@@ -112,6 +120,7 @@ namespace SDKTemplate
 
             for (var angle=AngleStepDegrees; angle <= TotalAngleDegrees; angle += AngleStepDegrees)
             {
+                centerWidthMM -= SpiralDelta;
                 centerWidthMM *= SpiralRatio;
                 currentHeight -= heightStepPerAngleStep;
                 var innerRight = new Point3d(
