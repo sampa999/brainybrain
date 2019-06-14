@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace SDKTemplate
+namespace ModelBuilder
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -37,7 +37,7 @@ namespace SDKTemplate
             // This is a static public property that allows downstream pages to get a handle to the MainPage instance
             // in order to call methods that are in this class.
             Current = this;
-            SampleTitle.Text = FEATURE_NAME;
+            MainTitle.Text = FEATURE_NAME;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
