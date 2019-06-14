@@ -13,11 +13,11 @@ using System;
 using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
 
-namespace SDKTemplate
+namespace ModelBuilder
 {
     public partial class MainPage : Page
     {
-        public const string FEATURE_NAME = "3D Printing C# Sample";
+        public const string FEATURE_NAME = "Scenarios";
 
         List<Scenario> scenarios = new List<Scenario>
         {

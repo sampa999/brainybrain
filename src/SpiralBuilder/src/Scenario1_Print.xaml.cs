@@ -9,6 +9,7 @@
 //
 //*********************************************************
 
+using Models;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -26,7 +27,7 @@ using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Xaml.Controls;
 
-namespace SDKTemplate
+namespace ModelBuilder
 {
     public sealed partial class Scenario1_Print : Page
     {
@@ -571,6 +572,7 @@ namespace SDKTemplate
             double spiralDelta = 10;
             int totalAngle = 360 * 9;
             double surfaceHeight = 2;
+            int surfaceTiltAngle = 10;
             double dropAmount = 0;
 
             var spiralBuilder = new SpiralBuilder(
@@ -581,6 +583,7 @@ namespace SDKTemplate
                 spiralDelta,
                 totalAngle,
                 surfaceHeight,
+                surfaceTiltAngle,
                 dropAmount);
 
             var triangleObject = new TriangleObject(spiralBuilder.Triangles.ToArray());

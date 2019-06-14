@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SDKTemplate
+namespace Models
 {
     public class SpiralBuilder
     {
@@ -17,6 +15,7 @@ namespace SDKTemplate
         private double SpiralDelta { get; set; }
         private int TotalAngleDegrees { get; set; }
         private double SurfaceHeight { get; set; }
+        private double SurfaceTiltAngle { get; set; }
         private double DropAmount { get; set; }
         /// <summary>
         /// This creates a 3d model of a spiral ramp
@@ -48,6 +47,7 @@ namespace SDKTemplate
             SpiralDelta = fullSpiralDelta * angleStep / (double) 360.0;
             TotalAngleDegrees = totalAngle;
             SurfaceHeight = surfaceHeight;
+            SurfaceTiltAngle = surfaceTiltAngle;
             DropAmount = dropAmount;
 
             CalculateWedges();

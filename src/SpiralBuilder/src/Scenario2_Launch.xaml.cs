@@ -19,7 +19,7 @@ using Windows.Storage.Pickers;
 using Windows.System;
 using Windows.UI.Xaml.Controls;
 
-namespace SDKTemplate
+namespace ModelBuilder
 {
     public sealed partial class Scenario2_Launch : Page
     {

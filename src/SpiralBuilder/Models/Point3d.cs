@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SDKTemplate
+namespace Models
 {
     public class Point3d : IComparable, IEquatable<Point3d>
     {

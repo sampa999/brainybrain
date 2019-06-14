@@ -1,13 +1,9 @@
 ﻿/*
  * The Wedge class holds the information about a single wedge of the platform.
  */
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SDKTemplate
+namespace Models
 {
     public class Wedge
     {

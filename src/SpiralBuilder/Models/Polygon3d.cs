@@ -1,14 +1,10 @@
 ﻿/*
- * Class to encapsulate a 3d square
+ * Class to encapsulate a 3d polygon
  */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SDKTemplate
+namespace Models
 {
     public class Polygon3d
     {

@@ -1,7 +1,8 @@
 ﻿
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SDKTemplate;
+using ModelBuilder;
+using Models;
 
 namespace UnitTestApp
 {
@@ -15,8 +16,10 @@ namespace UnitTestApp
             double surfaceWidth = 100;
             int angleStep = 90;
             double spiralRatio = 1.0;
+            double spiralDelta = 0;
             int totalAngle = 90;
             double surfaceHeight = 10;
+            int surfaceTiltAngle = 0;
             double dropAmount = 0;
 
             var spiralBuilder = new SpiralBuilder(
@@ -24,8 +27,10 @@ namespace UnitTestApp
                 surfaceWidth,
                 angleStep,
                 spiralRatio,
+                spiralDelta,
                 totalAngle,
                 surfaceHeight,
+                surfaceTiltAngle,
                 dropAmount);
 
             Assert.AreEqual(1, spiralBuilder.Wedges.Count);
@@ -41,8 +46,10 @@ namespace UnitTestApp
             double surfaceWidth = 100;
             int angleStep = 90;
             double spiralRatio = 0.9;
+            double spiralDelta = 0;
             int totalAngle = 90;
             double surfaceHeight = 10;
+            int surfaceTiltAngle = 0;
             double dropAmount = 0;
 
             var spiralBuilder = new SpiralBuilder(
@@ -50,8 +57,10 @@ namespace UnitTestApp
                 surfaceWidth,
                 angleStep,
                 spiralRatio,
+                spiralDelta,
                 totalAngle,
                 surfaceHeight,
+                surfaceTiltAngle,
                 dropAmount);
 
             Assert.AreEqual(1, spiralBuilder.Wedges.Count);

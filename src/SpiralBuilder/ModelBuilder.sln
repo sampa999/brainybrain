@@ -3,11 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3DPrinting", "src\3DPrinting.csproj", "{3B2608E4-F417-51A7-BFFE-72CEA697161C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelBuilder", "src\ModelBuilder.csproj", "{3B2608E4-F417-51A7-BFFE-72CEA697161C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestApp", "UnitTestApp\UnitTestApp.csproj", "{1E9D9A41-F3BF-4DB9-A93E-9D71E7CDE608}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Models", "Models\Models.shproj", "{D15A2680-4450-483A-8D4F-6F5674E41D2B}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Models\Models.projitems*{3b2608e4-f417-51a7-bffe-72cea697161c}*SharedItemsImports = 4
+		Models\Models.projitems*{d15a2680-4450-483a-8d4f-6f5674e41d2b}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
 		Debug|ARM64 = Debug|ARM64
