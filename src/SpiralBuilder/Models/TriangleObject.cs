@@ -49,7 +49,7 @@ namespace Models
             }
         }
 
-        private int FindPointInArray(Point3d[] pArray, Point3d p)
+        private int FindPointInArray(Vertex[] pArray, Vertex p)
         {
             for (var i=0; i<pArray.Length; i++)
             {
@@ -64,13 +64,13 @@ namespace Models
 
         private void ExtractVertices(IEnumerable<Triangle3d>  triangles)
         {
-            var vertexList = new List<Point3d>();
+            var vertexList = new List<Vertex>();
 
             foreach (var triangle in triangles)
             {
                 foreach (var v in triangle.Vertices)
                 {
-                    vertexList.Add(new Point3d(v.X, v.Y, v.Z));
+                    vertexList.Add(new Vertex(v.X, v.Y, v.Z));
                 }
             }
 
@@ -79,7 +79,7 @@ namespace Models
             Vertices = distinctList.ToArray();
         }
 
-        public Point3d[] Vertices { get; private set; }
+        public Vertex[] Vertices { get; private set; }
         public Triangle[] Triangles { get; private set; }
     }
 }

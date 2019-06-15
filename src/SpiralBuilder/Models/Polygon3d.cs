@@ -8,9 +8,9 @@ namespace Models
 {
     public class Polygon3d
     {
-        public Point3d[] Vertices;
+        public Vertex[] Vertices;
 
-        public Polygon3d(params Point3d[] v)
+        public Polygon3d(params Vertex[] v)
         {
             Vertices = v;
             CalculateTriangles();
@@ -18,7 +18,7 @@ namespace Models
 
         private void CalculateTriangles()
         {
-            var vertexList = new List<Point3d>();
+            var vertexList = new List<Vertex>();
             vertexList.AddRange(Vertices);
             var triangleList = new List<Triangle3d>();
             while (vertexList.Count > 3)

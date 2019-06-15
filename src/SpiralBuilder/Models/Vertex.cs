@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class Point3d : IComparable, IEquatable<Point3d>
+    public class Vertex : IComparable, IEquatable<Vertex>
     {
-        public Point3d(double x, double y, double z)
+        public Vertex(double x, double y, double z)
         {
             X = Math.Round(x,5);
             Y = Math.Round(y,5);
             Z = Math.Round(z,5);
         }
 
-        public Point3d Add(double x, double y, double z)
+        public Vertex Add(double x, double y, double z)
         {
-            return new Point3d(X + x, Y + y, Z + z);
+            return new Vertex(X + x, Y + y, Z + z);
         }
 
         public double X { get; set; }
@@ -26,7 +26,7 @@ namespace Models
 
         public int CompareTo(object obj)
         {
-            Point3d v = (Point3d)obj;
+            Vertex v = (Vertex)obj;
 
             if (v.X > X)
             {
@@ -58,7 +58,7 @@ namespace Models
             return 0;
         }
 
-        public bool Equals(Point3d other)
+        public bool Equals(Vertex other)
         {
             //Check whether the compared object is null. 
             if (other is null) return false;

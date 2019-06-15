@@ -7,17 +7,17 @@ namespace Models
 {
     public class Wedge
     {
-        public readonly Point3d InnerLeft;
-        public readonly Point3d InnerRight;
-        public readonly Point3d OuterLeft;
-        public readonly Point3d OuterRight;
+        public readonly Vertex InnerLeft;
+        public readonly Vertex InnerRight;
+        public readonly Vertex OuterLeft;
+        public readonly Vertex OuterRight;
         public readonly double Height;
 
         public Wedge(
-            Point3d innerLeft,
-            Point3d innerRight,
-            Point3d outerLeft,
-            Point3d outerRight,
+            Vertex innerLeft,
+            Vertex innerRight,
+            Vertex outerLeft,
+            Vertex outerRight,
             double height)
         {
             InnerLeft = innerLeft;

@@ -111,11 +111,11 @@ namespace Models
             double currentHeight = 0;
             double heightStepPerAngleStep = DropAmount * AngleStepDegrees / (double) 360.0;
             var centerRadius = StartingCenterRadius;
-            var innerLeft = new Point3d (
+            var innerLeft = new Vertex(
                 centerRadius * Math.Sin(0),
                 centerRadius * Math.Cos(0),
                 currentHeight);
-            var outerLeft = new Point3d(
+            var outerLeft = new Vertex(
                 (centerRadius + SurfaceWidth) * Math.Sin(0),
                 (centerRadius + SurfaceWidth) * Math.Cos(0),
                 currentHeight);
@@ -125,11 +125,11 @@ namespace Models
                 centerRadius -= SpiralDelta;
                 centerRadius *= SpiralRatio;
                 currentHeight -= heightStepPerAngleStep;
-                var innerRight = new Point3d(
+                var innerRight = new Vertex(
                     centerRadius * Math.Sin((double) angle * Math.PI / 180.0),
                     centerRadius * Math.Cos((double) angle * Math.PI / 180.0),
                     currentHeight);
-                var outerRight = new Point3d(
+                var outerRight = new Vertex(
                     (centerRadius + SurfaceWidth) * Math.Sin((double)angle * Math.PI / 180.0),
                     (centerRadius + SurfaceWidth) * Math.Cos((double)angle * Math.PI / 180.0),
                     currentHeight);
