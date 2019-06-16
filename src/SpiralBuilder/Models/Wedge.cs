@@ -26,20 +26,23 @@ namespace Models
             OuterRight = outerRight;
             Height = height;
 
-            CalculateTriangles();
+            CreateSides();
         }
 
-        private void CalculateTriangles()
+        private void CreateSides()
         {
-            CalculateTopTriangles();
-            CalculateBottomTriangles();
-            CalculateLeftTriangles();
-            CalculateRightTriangles();
-            CalculateInsideTriangles();
-            CalculateOutsideTriangles();
+            CreateTop();
+            CreateBottom();
+            CreateLeft();
+            CreateRight();
+            CreateInside();
+            CreateOutside();
         }
 
-        private void CalculateTopTriangles()
+        Vertex midTopLeft;
+        Vertex midTopRight;
+
+        private void CreateTop()
         {
             var trapezoid = new Trapezoid3d(
                 InnerLeft.Add(0, 0, Height),
@@ -49,45 +52,54 @@ namespace Models
                 );
 
             TopTrapezoids = trapezoid.Split();
+            midTopLeft = TopTrapezoids[1].Vertices[0];
+            midTopRight = TopTrapezoids[1].Vertices[1];
         }
 
-        private void CalculateBottomTriangles()
+        private void CreateBottom()
         {
-            var trapezoid = new Trapezoid3d(
-                InnerRight,
-                InnerLeft,
-                OuterLeft,
-                OuterRight
-                );
-
-            BottomTrapezoids = trapezoid.Split();
+            BottomTrapezoids = new Trapezoid3d[]
+            {
+                new Trapezoid3d(
+                    InnerRight,
+                    InnerLeft,
+                    OuterLeft,
+                    OuterRight
+                )
+            };
         }
 
-        private void CalculateLeftTriangles()
+        private void CreateLeft()
         {
-            var trapezoid = new Trapezoid3d(
+            LeftPolygons =
+                new Polygon[]
+                {
+                new Polygon(
                     InnerLeft,
                     InnerLeft.Add(0, 0, Height),
+                    midTopLeft,
                     OuterLeft.Add(0, 0, Height),
                     OuterLeft
-                    );
-
-            LeftTrapezoids = trapezoid.Split();
+                    )
+                };
         }
 
-        private void CalculateRightTriangles()
+        private void CreateRight()
         {
-            var trapezoid = new Trapezoid3d(
-                    InnerRight.Add(0, 0, Height),
-                    InnerRight,
-                    OuterRight,
-                    OuterRight.Add(0, 0, Height)
-                    );
-
-            RightTrapezoids = trapezoid.Split();
+            RightPolygons =
+                new Polygon[]
+                {
+                    new Polygon(
+                        midTopRight,
+                        InnerRight.Add(0, 0, Height),
+                        InnerRight,
+                        OuterRight,
+                        OuterRight.Add(0, 0, Height)
+                        )
+                };
         }
 
-        private void CalculateInsideTriangles()
+        private void CreateInside()
         {
             var trapezoid = new Trapezoid3d(
                 InnerLeft,
@@ -99,7 +111,7 @@ namespace Models
             InsideTriangles = trapezoid.Triangles;
         }
 
-        private void CalculateOutsideTriangles()
+        private void CreateOutside()
         {
             var trapezoid = new Trapezoid3d(
                 OuterRight,
@@ -111,7 +123,7 @@ namespace Models
             OutsideTriangles = trapezoid.Triangles;
         }
 
-        public Trapezoid3d[] TopTrapezoids { get; private set; }
+        public Polygon[] TopTrapezoids { get; private set; }
         public Triangle3d[] TopTriangles
         {
             get
@@ -120,7 +132,7 @@ namespace Models
             }
         }
 
-        public Trapezoid3d[] BottomTrapezoids { get; private set; }
+        public Polygon[] BottomTrapezoids { get; private set; }
         public Triangle3d[] BottomTriangles
         {
             get
@@ -129,21 +141,21 @@ namespace Models
             }
         }
 
-        public Trapezoid3d[] LeftTrapezoids { get; private set; }
+        public Polygon[] LeftPolygons { get; private set; }
         public Triangle3d[] LeftTriangles
         {
             get
             {
-                return LeftTrapezoids.SelectMany(T => T.Triangles).ToArray();
+                return LeftPolygons.SelectMany(T => T.Triangles).ToArray();
             }
         }
 
-        public Trapezoid3d[] RightTrapezoids { get; private set; }
+        public Polygon[] RightPolygons { get; private set; }
         public Triangle3d[] RightTriangles
         {
             get
             {
-                return RightTrapezoids.SelectMany(T => T.Triangles).ToArray();
+                return RightPolygons.SelectMany(T => T.Triangles).ToArray();
             }
         }
 

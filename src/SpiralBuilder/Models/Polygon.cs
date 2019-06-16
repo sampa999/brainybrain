@@ -17,5 +17,30 @@ namespace Models
 
             Vertices = vertices;
         }
+
+        public Triangle3d[] Triangles
+        {
+            get
+            {
+                var triangles = new List<Triangle3d>();
+                var centerVertex = Vertex.Average(Vertices);
+
+                for (var i=0; i<Vertices.Length-1; i++)
+                {
+                    triangles.Add(
+                        new Triangle3d(
+                            Vertices[i],
+                            Vertices[i + 1],
+                            centerVertex));
+                }
+                triangles.Add(
+                    new Triangle3d(
+                        Vertices[Vertices.Length - 1],
+                        Vertices[0],
+                        centerVertex));
+
+                return triangles.ToArray();
+            }
+        }
     }
 }

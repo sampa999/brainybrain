@@ -30,9 +30,27 @@ namespace Models
             );
         }
 
-        public double X { get; set; }
-        public double Y { get; set; }
-        public double Z { get; set; }
+        public static Vertex Average(params Vertex[] vertices)
+        {
+            double x = 0;
+            double y = 0;
+            double z = 0;
+            int count = 0;
+
+            foreach (var v in vertices)
+            {
+                x += v.X;
+                y += v.Y;
+                z += v.Z;
+                count++;
+            }
+
+            return new Vertex(x / count, y / count, z / count);
+        }
+
+        public double X { get; private set; }
+        public double Y { get; private set; }
+        public double Z { get; private set; }
 
         public int CompareTo(object obj)
         {

@@ -6,10 +6,8 @@ using System.Collections.Generic;
 
 namespace Models
 {
-    public class Trapezoid3d
+    public class Trapezoid3d : Polygon
     {
-        public Vertex[] Vertices;
-
         public Trapezoid3d[] Split()
         {
             var trapezoids = new Trapezoid3d[2];
@@ -23,27 +21,8 @@ namespace Models
             return trapezoids;
         }
 
-        public Trapezoid3d(params Vertex[] v)
+        public Trapezoid3d(params Vertex[] v) : base(v)
         {
-            Vertices = v;
-            CalculateTriangles();
         }
-
-        private void CalculateTriangles()
-        {
-            var vertexList = new List<Vertex>();
-            vertexList.AddRange(Vertices);
-            var triangleList = new List<Triangle3d>();
-            while (vertexList.Count > 3)
-            {
-                triangleList.Add(new Triangle3d(vertexList[0], vertexList[1], vertexList[2]));
-                vertexList.RemoveAt(1);
-            }
-            triangleList.Add(new Triangle3d(vertexList[0], vertexList[1], vertexList[2]));
-
-            Triangles = triangleList.ToArray();
-        }
-
-        public Triangle3d[] Triangles { get; private set; }
     }
 }

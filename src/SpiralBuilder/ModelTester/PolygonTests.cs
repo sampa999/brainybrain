@@ -11,6 +11,7 @@ namespace ModelTester
         public void CreatePolygon()
         {
             var p = new Polygon(new Vertex(0, 0, 0), new Vertex(0, 1, 0), new Vertex(0, 0, 1));
+            var t = p.Triangles;
         }
     }
 }
