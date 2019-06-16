@@ -41,55 +41,55 @@ namespace Models
 
         private void CalculateTopTriangles()
         {
-            var trapezoid = new Polygon3d(
+            var trapezoid = new Trapezoid3d(
                 InnerLeft.Add(0, 0, Height),
                 InnerRight.Add(0, 0, Height),
                 OuterRight.Add(0, 0, Height),
                 OuterLeft.Add(0, 0, Height)
                 );
 
-            TopTrapezoids = new Polygon3d[] { trapezoid };
+            TopTrapezoids = trapezoid.Split();
         }
 
         private void CalculateBottomTriangles()
         {
-            var trapezoid = new Polygon3d(
+            var trapezoid = new Trapezoid3d(
                 InnerRight,
                 InnerLeft,
                 OuterLeft,
                 OuterRight
                 );
 
-            BottomTriangles = trapezoid.Triangles;
+            BottomTrapezoids = trapezoid.Split();
         }
 
         private void CalculateLeftTriangles()
         {
-            var trapezoid = new Polygon3d(
-                InnerLeft,
-                InnerLeft.Add(0, 0, Height),
-                OuterLeft.Add(0, 0, Height),
-                OuterLeft
-                );
+            var trapezoid = new Trapezoid3d(
+                    InnerLeft,
+                    InnerLeft.Add(0, 0, Height),
+                    OuterLeft.Add(0, 0, Height),
+                    OuterLeft
+                    );
 
-            LeftTriangles = trapezoid.Triangles;
+            LeftTrapezoids = trapezoid.Split();
         }
 
         private void CalculateRightTriangles()
         {
-            var trapezoid = new Polygon3d(
-                InnerRight.Add(0, 0, Height),
-                InnerRight,
-                OuterRight,
-                OuterRight.Add(0, 0, Height)
-                );
+            var trapezoid = new Trapezoid3d(
+                    InnerRight.Add(0, 0, Height),
+                    InnerRight,
+                    OuterRight,
+                    OuterRight.Add(0, 0, Height)
+                    );
 
-            RightTriangles = trapezoid.Triangles;
+            RightTrapezoids = trapezoid.Split();
         }
 
         private void CalculateInsideTriangles()
         {
-            var trapezoid = new Polygon3d(
+            var trapezoid = new Trapezoid3d(
                 InnerLeft,
                 InnerRight,
                 InnerRight.Add(0, 0, Height),
@@ -101,7 +101,7 @@ namespace Models
 
         private void CalculateOutsideTriangles()
         {
-            var trapezoid = new Polygon3d(
+            var trapezoid = new Trapezoid3d(
                 OuterRight,
                 OuterLeft,
                 OuterLeft.Add(0, 0, Height),
@@ -111,7 +111,7 @@ namespace Models
             OutsideTriangles = trapezoid.Triangles;
         }
 
-        public Polygon3d[] TopTrapezoids { get; private set; }
+        public Trapezoid3d[] TopTrapezoids { get; private set; }
         public Triangle3d[] TopTriangles
         {
             get
@@ -119,9 +119,34 @@ namespace Models
                 return TopTrapezoids.SelectMany(T => T.Triangles).ToArray();
             }
         }
-        public Triangle3d[] BottomTriangles { get; private set; }
-        public Triangle3d[] LeftTriangles { get; private set; }
-        public Triangle3d[] RightTriangles { get; private set; }
+
+        public Trapezoid3d[] BottomTrapezoids { get; private set; }
+        public Triangle3d[] BottomTriangles
+        {
+            get
+            {
+                return BottomTrapezoids.SelectMany(T => T.Triangles).ToArray();
+            }
+        }
+
+        public Trapezoid3d[] LeftTrapezoids { get; private set; }
+        public Triangle3d[] LeftTriangles
+        {
+            get
+            {
+                return LeftTrapezoids.SelectMany(T => T.Triangles).ToArray();
+            }
+        }
+
+        public Trapezoid3d[] RightTrapezoids { get; private set; }
+        public Triangle3d[] RightTriangles
+        {
+            get
+            {
+                return RightTrapezoids.SelectMany(T => T.Triangles).ToArray();
+            }
+        }
+
         public Triangle3d[] InsideTriangles { get; private set; }
         public Triangle3d[] OutsideTriangles { get; private set; }
     }

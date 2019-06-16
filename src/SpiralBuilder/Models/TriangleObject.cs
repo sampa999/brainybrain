@@ -12,9 +12,9 @@ namespace Models
     /// </summary>
     public class TriangleObject
     {
-        public class Triangle
+        public class TriangleInternal
         {
-            public Triangle()
+            public TriangleInternal()
             {
                 Vertex = new int[3];
             }
@@ -30,11 +30,11 @@ namespace Models
 
         private void MapTriangles(Triangle3d[] triangles)
         {
-            Triangles = new Triangle[triangles.Length];
+            Triangles = new TriangleInternal[triangles.Length];
 
             for (var i=0;  i<triangles.Length; i++)
             {
-                Triangles[i] = new Triangle();
+                Triangles[i] = new TriangleInternal();
                 for (var vIndex = 0; vIndex < 3; vIndex++)
                 {
                     var index = Array.BinarySearch(Vertices, triangles[i].Vertices[vIndex]);
@@ -80,6 +80,6 @@ namespace Models
         }
 
         public Vertex[] Vertices { get; private set; }
-        public Triangle[] Triangles { get; private set; }
+        public TriangleInternal[] Triangles { get; private set; }
     }
 }

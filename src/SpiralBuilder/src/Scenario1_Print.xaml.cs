@@ -568,11 +568,11 @@ namespace ModelBuilder
             double startingCenterRadius = 100;
             double surfaceWidth = 5;
             int angleStep = 1;
-            double spiralRatio = 1.0;
-            double spiralDelta = 10;
-            int totalAngle = 360 * 9;
+            double spiralRatio = 0.9;
+            double spiralDelta = 0;
+            int totalAngle = 360*3;
             double surfaceHeight = 2;
-            int surfaceTiltAngle = 10;
+            int surfaceTiltAngle = 0;
             double dropAmount = 0;
 
             var spiralBuilder = new SpiralBuilder(
