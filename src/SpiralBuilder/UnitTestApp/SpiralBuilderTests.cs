@@ -33,7 +33,10 @@ namespace UnitTestApp
                 surfaceTiltAngle,
                 dropAmount);
 
+            spiralBuilder.CalculateWedges();
             Assert.AreEqual(1, spiralBuilder.Wedges.Count);
+
+            spiralBuilder.ExtractTriangles();
             Assert.AreEqual(20, spiralBuilder.Triangles.Count);
 
             var triangleObject = new TriangleObject(spiralBuilder.Triangles.ToArray());
@@ -63,7 +66,10 @@ namespace UnitTestApp
                 surfaceTiltAngle,
                 dropAmount);
 
+            spiralBuilder.CalculateWedges();
             Assert.AreEqual(1, spiralBuilder.Wedges.Count);
+
+            spiralBuilder.ExtractTriangles();
             Assert.AreEqual(20, spiralBuilder.Triangles.Count);
 
             var triangleObject = new TriangleObject(spiralBuilder.Triangles.ToArray());

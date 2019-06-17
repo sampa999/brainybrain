@@ -29,6 +29,16 @@ namespace Models
             CreateSides();
         }
 
+        public void RemoveBottom()
+        {
+            BottomTrapezoids = new Polygon[0];
+        }
+
+        public void RemoveTopOutside()
+        {
+            TopTrapezoids = new Polygon[] { TopTrapezoids[0] };
+        }
+
         private void CreateSides()
         {
             CreateTop();

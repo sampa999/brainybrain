@@ -50,8 +50,7 @@ namespace Models
             SurfaceTiltAngle = surfaceTiltAngle;
             DropAmount = dropAmount;
 
-            CalculateWedges();
-            ExtractTriangles();
+            Supports = new List<Polygon>();
         }
 
         private double CalculateStepSpiralRatio(double fullSpiralRatio)
@@ -89,7 +88,107 @@ namespace Models
             return currentGuess;
         }
 
-        private void ExtractTriangles()
+        public void AddSupports()
+        {
+            var offset = 360 / AngleStepDegrees;
+            // Remove the bottom polygon from wedge 0,1,2
+            // Remove the outside top polygon from wedge offset+1
+            // Add connecting polygons from outline of outside top polygon wedge offset+1
+            // to outline of bottom polygons from wedge 0,1,2
+            // Repeat
+
+            var currentBottom = offset + 1;
+            while (currentBottom < Wedges.Count - 1)
+            {
+                AddSupport(currentBottom, currentBottom - offset - 1);
+                currentBottom += 3;
+            }
+        }
+
+        /// <summary>
+        // Remove the bottom polygon from wedge topIndexLeft, topIndexLeft+1, topIndexLeft+2
+        // Remove the outside top polygon from wedge bottomIndex 
+        // Add connecting polygons from outline of outside top polygon wedge bottomIndex
+        // to outline of bottom polygons from wedge topIndexLeft, topIndexLeft+1, topIndexLeft+2
+        /// </summary>
+        /// <param name="bottomIndex"></param>
+        /// <param name="topIndexLeft"></param>
+        private void AddSupport(
+            int bottomIndex,
+            int topIndexLeft)
+        {
+            var bottom0 = Wedges[topIndexLeft].BottomTrapezoids[0];
+            Wedges[topIndexLeft].RemoveBottom();
+            var bottom1 = Wedges[topIndexLeft+1].BottomTrapezoids[0];
+            Wedges[topIndexLeft+1].RemoveBottom();
+            var bottom2 = Wedges[topIndexLeft+2].BottomTrapezoids[0];
+            Wedges[topIndexLeft+2].RemoveBottom();
+            var top = Wedges[bottomIndex].TopTrapezoids[1];
+            Wedges[bottomIndex].RemoveTopOutside();
+
+            // Left side
+            var p = new Polygon(
+                top.Vertices[3],
+                top.Vertices[0],
+                bottom0.Vertices[1],
+                bottom0.Vertices[2]);
+            Supports.Add(p);
+            // Right side
+            p = new Polygon(
+                top.Vertices[1],
+                top.Vertices[2],
+                bottom2.Vertices[3],
+                bottom2.Vertices[0]);
+            Supports.Add(p);
+            // Inside Left
+            p = new Polygon(
+                top.Vertices[0],
+                bottom0.Vertices[0],
+                bottom0.Vertices[1]
+                );
+            Supports.Add(p);
+            // Inside Middle
+            p = new Polygon(
+                top.Vertices[0],
+                top.Vertices[1],
+                bottom1.Vertices[0],
+                bottom1.Vertices[1]
+                );
+            Supports.Add(p);
+            // Inside Right
+            p = new Polygon(
+                top.Vertices[1],
+                bottom2.Vertices[0],
+                bottom2.Vertices[1]
+                );
+            Supports.Add(p);
+            // Outside Left
+            p = new Polygon(
+                top.Vertices[3],
+                bottom0.Vertices[2],
+                bottom0.Vertices[3]
+                );
+            Supports.Add(p);
+            // Outside Middle
+            p = new Polygon(
+                top.Vertices[2],
+                top.Vertices[3],
+                bottom1.Vertices[2],
+                bottom1.Vertices[3]
+                );
+            Supports.Add(p);
+            // Outside Right
+            p = new Polygon(
+                top.Vertices[2],
+                bottom2.Vertices[2],
+                bottom2.Vertices[3]
+                );
+            Supports.Add(p);
+        }
+
+        private List<Polygon> Supports;
+
+        public void ExtractTriangles()
         {
             Triangles = new List<Triangle3d>();
 
@@ -102,9 +201,13 @@ namespace Models
                 Triangles.AddRange(wedge.OutsideTriangles);
             }
             Triangles.AddRange(Wedges.Last().RightTriangles);
+            foreach (var p in Supports)
+            {
+                Triangles.AddRange(p.Triangles);
+            }
         }
 
-        private void CalculateWedges()
+        public void CalculateWedges()
         {
             Wedges = new List<Wedge>();
 

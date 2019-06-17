@@ -20,13 +20,13 @@ namespace Models
             return new Vertex(X + x, Y + y, Z + z);
         }
 
-        public static Vertex Average(Vertex v1, Vertex v2, double v1Weight)
+        public static Vertex Average(Vertex v1, Vertex v2, double v2Weight)
         {
             return new Vertex
             (
-                (v1.X * v1Weight + v2.X) / (1.0 + v1Weight),
-                (v1.Y * v1Weight + v2.Y) / (1.0 + v1Weight),
-                (v1.Z * v1Weight + v2.Z) / (1.0 + v1Weight)
+                (v1.X + v2.X * v2Weight) / (1.0 + v2Weight),
+                (v1.Y + v2.Y * v2Weight) / (1.0 + v2Weight),
+                (v1.Z + v2.Z * v2Weight) / (1.0 + v2Weight)
             );
         }
 

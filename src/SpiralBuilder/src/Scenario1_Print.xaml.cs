@@ -565,15 +565,15 @@ namespace ModelBuilder
 
         private async void CreateSpiralProgrammatically(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            double startingCenterRadius = 70;
-            double surfaceWidth = 5;
+            double startingCenterRadius = 100;
+            double surfaceWidth = 10;
             int angleStep = 1;
-            double spiralRatio = 1.0;
-            double spiralDelta = 6;
-            int totalAngle = 360*10;
+            double spiralRatio = 0.9;
+            double spiralDelta = 0;
+            int totalAngle = 360*9;
             double surfaceHeight = 2;
             int surfaceTiltAngle = 0;
-            double dropAmount = 0;
+            double dropAmount = 10;
 
             var spiralBuilder = new SpiralBuilder(
                 startingCenterRadius,
@@ -585,6 +585,12 @@ namespace ModelBuilder
                 surfaceHeight,
                 surfaceTiltAngle,
                 dropAmount);
+
+            spiralBuilder.CalculateWedges();
+
+            spiralBuilder.AddSupports();
+
+            spiralBuilder.ExtractTriangles();
 
             var triangleObject = new TriangleObject(spiralBuilder.Triangles.ToArray());
 
@@ -662,7 +668,6 @@ namespace ModelBuilder
             if (!res.IsValid)
             {
                 await model.RepairAsync();
-                await SaveMeshToFile(model.Meshes[0]);
             }
 
             // create a component.
