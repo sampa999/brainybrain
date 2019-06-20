@@ -1,6 +1,7 @@
 ﻿/*
  * The Wedge class holds the information about a single wedge of the platform.
  */
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Models
@@ -36,7 +37,13 @@ namespace Models
 
         public void RemoveTopOutside()
         {
-            TopTrapezoids = new Polygon[] { TopTrapezoids[0] };
+            var l = new List<Polygon>();
+
+            for (var i=0; i<TopTrapezoids.Length-1; i++)
+            {
+                l.Add(TopTrapezoids[i]);
+            }
+            TopTrapezoids = l.ToArray();
         }
 
         private void CreateSides()
@@ -49,8 +56,14 @@ namespace Models
             CreateOutside();
         }
 
-        Vertex midTopLeft;
-        Vertex midTopRight;
+        Vertex topVertex4;
+        Vertex topVertex5;
+        Vertex topVertex6;
+        Vertex topVertex7;
+        Vertex topVertex8;
+        Vertex topVertex9;
+
+        Vertex dropZ = new Vertex(0, 0, 1);
 
         private void CreateTop()
         {
@@ -61,9 +74,49 @@ namespace Models
                 OuterLeft.Add(0, 0, Height)
                 );
 
-            TopTrapezoids = trapezoid.Split();
-            midTopLeft = TopTrapezoids[1].Vertices[0];
-            midTopRight = TopTrapezoids[1].Vertices[1];
+            var vDiff = Vertex.Subtract(trapezoid.Vertices[3], trapezoid.Vertices[0]);
+            vDiff = Vertex.Divide(vDiff, 4);
+            topVertex5 = Vertex.Subtract(trapezoid.Vertices[3], vDiff);
+            topVertex7 = Vertex.Subtract(topVertex5, vDiff);
+            topVertex9 = Vertex.Subtract(topVertex7, vDiff);
+            topVertex7 = Vertex.Subtract(topVertex7, dropZ);
+            topVertex9 = Vertex.Subtract(topVertex9, dropZ);
+
+            vDiff = Vertex.Subtract(trapezoid.Vertices[2], trapezoid.Vertices[1]);
+            vDiff = Vertex.Divide(vDiff, 4);
+            topVertex4 = Vertex.Subtract(trapezoid.Vertices[2], vDiff);
+            topVertex6 = Vertex.Subtract(topVertex4, vDiff);
+            topVertex8 = Vertex.Subtract(topVertex6, vDiff);
+            topVertex6 = Vertex.Subtract(topVertex6, dropZ);
+            topVertex8 = Vertex.Subtract(topVertex8, dropZ);
+
+            TopTrapezoids = new Polygon[]
+            {
+                new Trapezoid3d(
+                    trapezoid.Vertices[0],
+                    trapezoid.Vertices[1],
+                    topVertex8,
+                    topVertex9),
+                new Trapezoid3d(
+                    topVertex9,
+                    topVertex8,
+                    topVertex6,
+                    topVertex7),
+                new Trapezoid3d(
+                    topVertex7,
+                    topVertex6,
+                    topVertex4,
+                    topVertex5),
+                new Trapezoid3d(
+                    topVertex5,
+                    topVertex4,
+                    trapezoid.Vertices[2],
+                    trapezoid.Vertices[3])
+            };
+
+            var topTrapezoids = trapezoid.Split();
+            var tmpmidTopLeft = new Vertex[] { TopTrapezoids[1].Vertices[0] };
+            var tmpmidTopRight = new Vertex[] { TopTrapezoids[1].Vertices[1] };
         }
 
         private void CreateBottom()
@@ -87,7 +140,9 @@ namespace Models
                 new Polygon(
                     InnerLeft,
                     InnerLeft.Add(0, 0, Height),
-                    midTopLeft,
+                    topVertex9,
+                    topVertex7,
+                    topVertex5,
                     OuterLeft.Add(0, 0, Height),
                     OuterLeft
                     )
@@ -100,7 +155,9 @@ namespace Models
                 new Polygon[]
                 {
                     new Polygon(
-                        midTopRight,
+                        topVertex4,
+                        topVertex6,
+                        topVertex8,
                         InnerRight.Add(0, 0, Height),
                         InnerRight,
                         OuterRight,

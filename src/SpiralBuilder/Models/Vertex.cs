@@ -17,7 +17,12 @@ namespace Models
 
         public Vertex Add(double x, double y, double z)
         {
-            return new Vertex(X + x, Y + y, Z + z);
+            return Add(new Vertex(x, y, z));
+        }
+
+        public Vertex Add(Vertex vAdd)
+        {
+            return new Vertex(X + vAdd.X, Y + vAdd.Y, Z + vAdd.Z);
         }
 
         public static Vertex Average(Vertex v1, Vertex v2, double v2Weight)
@@ -28,6 +33,32 @@ namespace Models
                 (v1.Y + v2.Y * v2Weight) / (1.0 + v2Weight),
                 (v1.Z + v2.Z * v2Weight) / (1.0 + v2Weight)
             );
+        }
+
+        public static Vertex Subtract(Vertex v1, Vertex v2)
+        {
+            return new Vertex
+                (
+                v1.X - v2.X,
+                v1.Y - v2.Y,
+                v1.Z - v2.Z
+                );
+        }
+
+        public static Vertex Divide(Vertex v1, double v2)
+        {
+            return new Vertex(
+                v1.X / v2,
+                v1.Y / v2,
+                v1.Z / v2);
+        }
+
+        public static Vertex Multiply(Vertex v1, double v2)
+        {
+            return new Vertex(
+                v1.X * v2,
+                v1.Y * v2,
+                v1.Z * v2);
         }
 
         public static Vertex Average(params Vertex[] vertices)

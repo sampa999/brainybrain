@@ -123,7 +123,7 @@ namespace Models
             Wedges[topIndexLeft+1].RemoveBottom();
             var bottom2 = Wedges[topIndexLeft+2].BottomTrapezoids[0];
             Wedges[topIndexLeft+2].RemoveBottom();
-            var top = Wedges[bottomIndex].TopTrapezoids[1];
+            var top = Wedges[bottomIndex].TopTrapezoids[Wedges[bottomIndex].TopTrapezoids.Length-1];
             Wedges[bottomIndex].RemoveTopOutside();
 
             // Left side
