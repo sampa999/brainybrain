@@ -37,10 +37,10 @@ namespace UnitTestApp
             Assert.AreEqual(1, spiralBuilder.Wedges.Count);
 
             spiralBuilder.ExtractTriangles();
-            Assert.AreEqual(20, spiralBuilder.Triangles.Count);
+            Assert.AreEqual(42, spiralBuilder.Triangles.Count);
 
             var triangleObject = new TriangleObject(spiralBuilder.Triangles.ToArray());
-            Assert.AreEqual(20, triangleObject.Triangles.Length);
+            Assert.AreEqual(42, triangleObject.Triangles.Length);
         }
         [TestMethod]
         public void SingleWedgeSpiralSpiralRatio()
@@ -70,10 +70,10 @@ namespace UnitTestApp
             Assert.AreEqual(1, spiralBuilder.Wedges.Count);
 
             spiralBuilder.ExtractTriangles();
-            Assert.AreEqual(20, spiralBuilder.Triangles.Count);
+            Assert.AreEqual(42, spiralBuilder.Triangles.Count);
 
             var triangleObject = new TriangleObject(spiralBuilder.Triangles.ToArray());
-            Assert.AreEqual(20, triangleObject.Triangles.Length);
+            Assert.AreEqual(42, triangleObject.Triangles.Length);
         }
     }
 }

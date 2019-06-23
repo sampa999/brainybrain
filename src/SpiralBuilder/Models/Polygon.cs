@@ -23,22 +23,28 @@ namespace Models
             get
             {
                 var triangles = new List<Triangle3d>();
-                var centerVertex = Vertex.Average(Vertices);
-
-                for (var i=0; i<Vertices.Length-1; i++)
+                if (Vertices.Length == 3)
                 {
+                    triangles.Add(new Triangle3d(Vertices[0], Vertices[1], Vertices[2]));
+                }
+                else
+                {
+                    var centerVertex = Vertex.Average(Vertices);
+
+                    for (var i = 0; i < Vertices.Length - 1; i++)
+                    {
+                        triangles.Add(
+                            new Triangle3d(
+                                Vertices[i],
+                                Vertices[i + 1],
+                                centerVertex));
+                    }
                     triangles.Add(
                         new Triangle3d(
-                            Vertices[i],
-                            Vertices[i + 1],
+                            Vertices[Vertices.Length - 1],
+                            Vertices[0],
                             centerVertex));
                 }
-                triangles.Add(
-                    new Triangle3d(
-                        Vertices[Vertices.Length - 1],
-                        Vertices[0],
-                        centerVertex));
-
                 return triangles.ToArray();
             }
         }

@@ -565,12 +565,12 @@ namespace ModelBuilder
 
         private async void CreateSpiralProgrammatically(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            double startingCenterRadius = 100;
-            double surfaceWidth = 10;
-            int angleStep = 2;
+            double startingCenterRadius = 50;
+            double surfaceWidth = 12;
+            int angleStep = 1;
             double spiralRatio = 1.0;
             double spiralDelta = 9;
-            int totalAngle = 360 * 9;
+            int totalAngle = 360 * 3;
             double surfaceHeight = 3;
             int surfaceTiltAngle = 0;
             double dropAmount = 10;
