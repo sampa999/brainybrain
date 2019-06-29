@@ -567,13 +567,13 @@ namespace ModelBuilder
         {
             double startingCenterRadius = 50;
             double surfaceWidth = 12;
-            int angleStep = 3;
+            int angleStep = 30;
             double spiralRatio = 1.0;
-            double spiralDelta = 9;
-            int totalAngle = 360 * 3;
+            double spiralDelta = 0;
+            int totalAngle = 90;
             double surfaceHeight = 3;
             int surfaceTiltAngle = 0;
-            double dropAmount = 20;
+            double dropAmount = 0;
 
             var spiralBuilder = new SpiralBuilder(
                 startingCenterRadius,
@@ -589,6 +589,8 @@ namespace ModelBuilder
             spiralBuilder.CalculateWedges();
 
             spiralBuilder.AddSupports();
+
+            spiralBuilder.AddBaseSupports();
 
             spiralBuilder.ExtractTriangles();
 

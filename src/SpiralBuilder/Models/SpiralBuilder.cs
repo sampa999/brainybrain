@@ -88,23 +88,6 @@ namespace Models
             return currentGuess;
         }
 
-        public void AddSupports()
-        {
-            var offset = 360 / AngleStepDegrees;
-            // Remove the bottom polygon from wedge 0,1,2
-            // Remove the outside top polygon from wedge offset+1
-            // Add connecting polygons from outline of outside top polygon wedge offset+1
-            // to outline of bottom polygons from wedge 0,1,2
-            // Repeat
-
-            var currentBottom = offset + 1;
-            while (currentBottom < Wedges.Count - 1)
-            {
-                AddSupport(currentBottom, currentBottom - offset - 1);
-                currentBottom += 3;
-            }
-        }
-
         /// <summary>
         // Remove the bottom polygon from wedge topIndexLeft, topIndexLeft+1, topIndexLeft+2
         // Remove the outside top polygon from wedge bottomIndex 
@@ -119,11 +102,11 @@ namespace Models
         {
             var bottom0 = Wedges[topIndexLeft].BottomTrapezoids[0];
             Wedges[topIndexLeft].RemoveBottom();
-            var bottom1 = Wedges[topIndexLeft+1].BottomTrapezoids[0];
-            Wedges[topIndexLeft+1].RemoveBottom();
-            var bottom2 = Wedges[topIndexLeft+2].BottomTrapezoids[0];
-            Wedges[topIndexLeft+2].RemoveBottom();
-            var top = Wedges[bottomIndex].TopTrapezoids[Wedges[bottomIndex].TopTrapezoids.Length-1];
+            var bottom1 = Wedges[topIndexLeft + 1].BottomTrapezoids[0];
+            Wedges[topIndexLeft + 1].RemoveBottom();
+            var bottom2 = Wedges[topIndexLeft + 2].BottomTrapezoids[0];
+            Wedges[topIndexLeft + 2].RemoveBottom();
+            var top = Wedges[bottomIndex].TopTrapezoids[Wedges[bottomIndex].TopTrapezoids.Length - 1];
             Wedges[bottomIndex].RemoveTopOutside();
 
             // Left side
@@ -186,6 +169,118 @@ namespace Models
             Supports.Add(p);
         }
 
+        public void AddSupports()
+        {
+            var offset = 360 / AngleStepDegrees;
+            // Remove the bottom polygon from wedge 0,1,2
+            // Remove the outside top polygon from wedge offset+1
+            // Add connecting polygons from outline of outside top polygon wedge offset+1
+            // to outline of bottom polygons from wedge 0,1,2
+            // Repeat
+
+            var currentBottom = offset + 1;
+            while (currentBottom < Wedges.Count - 1)
+            {
+                AddSupport(currentBottom, currentBottom - offset - 1);
+                currentBottom += 3;
+            }
+        }
+
+        public void AddBaseSupport(
+            int topIndex,
+            double bottomZ)
+        {
+
+        }
+
+        public void AddBaseSupports()
+        {
+            // Remove the square at the back of the right side of the last wedge
+            // Add a cube attached at that point, just for testing.
+
+            var lastWedge = Wedges.Last();
+            var rightPolygon = lastWedge.RightPolygons[0];
+            var leftPolygon = lastWedge.LeftPolygons[0];
+            var bottomPolygon = lastWedge.BottomTrapezoids[0];
+
+            var newVert = new Vertex(
+                rightPolygon.Vertices[0].X,
+                rightPolygon.Vertices[0].Y,
+                rightPolygon.Vertices[5].Z);
+
+            var newRightPolygon = new Polygon(
+                rightPolygon.Vertices[0],
+                rightPolygon.Vertices[1],
+                rightPolygon.Vertices[2],
+                rightPolygon.Vertices[3],
+                rightPolygon.Vertices[4],
+                newVert
+                );
+
+            lastWedge.RightPolygons[0] = newRightPolygon;
+
+            var newBottomPolygon = new Polygon(
+                bottomPolygon.Vertices[0],
+                bottomPolygon.Vertices[1],
+                bottomPolygon.Vertices[2],
+                bottomPolygon.Vertices[3],
+                newVert
+                );
+
+            lastWedge.BottomTrapezoids[0] = newBottomPolygon;
+
+            var dx = rightPolygon.Vertices[6].X - leftPolygon.Vertices[5].X;
+            var dy = rightPolygon.Vertices[6].Y - leftPolygon.Vertices[5].Y;
+
+            // Create the vertices that will form the new box that contains the
+            // now missing section of the right polygon
+            var boxVertices = new Vertex[]
+            {
+                newVert,
+                rightPolygon.Vertices[5],
+                rightPolygon.Vertices[6],
+                rightPolygon.Vertices[0],
+                newVert.Add(dx, dy, 0),
+                rightPolygon.Vertices[5].Add(dx, dy, 0),
+                rightPolygon.Vertices[6].Add(dx, dy, 0),
+                rightPolygon.Vertices[0].Add(dx, dy, 0)
+            };
+
+            baseSupports = new List<Polygon>();
+            baseSupports.Add(
+                new Polygon(
+                    boxVertices[0],
+                    boxVertices[4],
+                    boxVertices[7],
+                    boxVertices[3]));
+            baseSupports.Add(
+                new Polygon(
+                    boxVertices[4],
+                    boxVertices[5],
+                    boxVertices[6],
+                    boxVertices[7]));
+            baseSupports.Add(
+                new Polygon(
+                    boxVertices[5],
+                    boxVertices[1],
+                    boxVertices[2],
+                    boxVertices[6]));
+            baseSupports.Add(
+                new Polygon(
+                    boxVertices[3],
+                    boxVertices[7],
+                    boxVertices[6],
+                    boxVertices[2]));
+            baseSupports.Add(
+                new Polygon(
+                    boxVertices[0],
+                    boxVertices[1],
+                    boxVertices[5],
+                    boxVertices[4]));
+        }
+
+        private List<Polygon> baseSupports;
+
         private List<Polygon> Supports;
 
         public void ExtractTriangles()
@@ -201,9 +296,18 @@ namespace Models
                 Triangles.AddRange(wedge.OutsideTriangles);
             }
             Triangles.AddRange(Wedges.Last().RightTriangles);
+
             foreach (var p in Supports)
             {
                 Triangles.AddRange(p.Triangles);
+            }
+
+            if (baseSupports != null)
+            {
+                foreach (var p in baseSupports)
+                {
+                    Triangles.AddRange(p.Triangles);
+                }
             }
         }
 

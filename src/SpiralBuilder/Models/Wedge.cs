@@ -121,7 +121,7 @@ namespace Models
 
         private void CreateBottom()
         {
-            BottomTrapezoids = new Trapezoid3d[]
+            BottomTrapezoids = new Polygon[]
             {
                 new Trapezoid3d(
                     InnerRight,
