@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Polygon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SmallWedge.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Trapezoid3d.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpiralBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Triangle3d.cs" />

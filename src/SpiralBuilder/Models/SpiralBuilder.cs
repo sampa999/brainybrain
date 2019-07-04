@@ -186,9 +186,8 @@ namespace Models
             }
         }
 
-        public void AddBaseSupport(
-            int topIndex,
-            double bottomZ)
+        public void AddBaseSupportBottom(
+            )
         {
 
         }
@@ -246,37 +245,73 @@ namespace Models
                 rightPolygon.Vertices[0].Add(dx, dy, 0)
             };
 
+            var innerLeftBottom = boxVertices[0];
+            var outerLeftBottom = boxVertices[1];
+            var outerLeftTop = boxVertices[2];
+            var innerLeftTop = boxVertices[3];
+
+            var indexOfWedgeAbove = Wedges.Count - (360 / AngleStepDegrees);
+
+            var z = newVert.Z;
+
+            var innerRight = new Vertex(
+                Wedges[indexOfWedgeAbove].InnerRight.X,
+                Wedges[indexOfWedgeAbove].InnerRight.Y,
+                z);
+
+            var outerRight = new Vertex(
+                Wedges[indexOfWedgeAbove].OuterRight.X,
+                Wedges[indexOfWedgeAbove].OuterRight.Y,
+                z);
+
             baseSupports = new List<Polygon>();
-            baseSupports.Add(
-                new Polygon(
-                    boxVertices[0],
-                    boxVertices[4],
-                    boxVertices[7],
-                    boxVertices[3]));
-            baseSupports.Add(
-                new Polygon(
-                    boxVertices[4],
-                    boxVertices[5],
-                    boxVertices[6],
-                    boxVertices[7]));
-            baseSupports.Add(
-                new Polygon(
-                    boxVertices[5],
-                    boxVertices[1],
-                    boxVertices[2],
-                    boxVertices[6]));
-            baseSupports.Add(
-                new Polygon(
-                    boxVertices[3],
-                    boxVertices[7],
-                    boxVertices[6],
-                    boxVertices[2]));
-            baseSupports.Add(
-                new Polygon(
-                    boxVertices[0],
-                    boxVertices[1],
-                    boxVertices[5],
-                    boxVertices[4]));
+
+            var smallWedges = new List<SmallWedge>();
+
+            // Add the first small wedge. It's special because it has to
+            // align with the last regular wedge.
+            smallWedges.Add(new SmallWedge(
+                innerLeftBottom,
+                innerRight,
+                outerRight,
+                outerLeftBottom,
+                SurfaceHeight,
+                innerLeftTop,
+                outerLeftTop));
+
+            var maxSteps = 180 / AngleStepDegrees;
+            for (var i = 1; i < maxSteps; i++)
+            {
+                innerLeftBottom = innerRight;
+                outerLeftBottom = outerRight;
+
+                innerRight = new Vertex(
+                    Wedges[indexOfWedgeAbove+i].InnerRight.X,
+                    Wedges[indexOfWedgeAbove+i].InnerRight.Y,
+                    z);
+
+                outerRight = new Vertex(
+                    Wedges[indexOfWedgeAbove+i].OuterRight.X,
+                    Wedges[indexOfWedgeAbove+i].OuterRight.Y,
+                    z);
+
+                smallWedges.Add(new SmallWedge(
+                    innerLeftBottom,
+                    innerRight,
+                    outerRight,
+                    outerLeftBottom,
+                    SurfaceHeight));
+            }
+
+            foreach (var smallWedge in smallWedges)
+            {
+                baseSupports.AddRange(smallWedge.Inside);
+                baseSupports.AddRange(smallWedge.Outside);
+                baseSupports.AddRange(smallWedge.Top);
+                baseSupports.AddRange(smallWedge.Bottom);
+            }
+            baseSupports.AddRange(smallWedges.Last().Right);
+
         }
 
         private List<Polygon> baseSupports;
@@ -341,7 +376,7 @@ namespace Models
                     (centerRadius + SurfaceWidth) * Math.Cos((double)angle * Math.PI / 180.0),
                     currentHeight);
 
-                Wedges.Add(new Wedge(innerLeft, innerRight, outerLeft, outerRight, SurfaceHeight));
+                Wedges.Add(new Wedge(innerLeft, innerRight, outerLeft, outerRight, SurfaceHeight, angle));
                 outerLeft = outerRight;
                 innerLeft = innerRight;
             }

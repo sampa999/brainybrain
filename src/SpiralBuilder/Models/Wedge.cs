@@ -13,19 +13,22 @@ namespace Models
         public readonly Vertex OuterLeft;
         public readonly Vertex OuterRight;
         public readonly double Height;
+        public readonly int AngleForRightSide;
 
         public Wedge(
             Vertex innerLeft,
             Vertex innerRight,
             Vertex outerLeft,
             Vertex outerRight,
-            double height)
+            double height,
+            int angleForRightSide)
         {
             InnerLeft = innerLeft;
             InnerRight = innerRight;
             OuterLeft = outerLeft;
             OuterRight = outerRight;
             Height = height;
+            AngleForRightSide = angleForRightSide;
 
             CreateSides();
         }

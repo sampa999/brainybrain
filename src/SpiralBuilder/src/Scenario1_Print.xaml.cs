@@ -565,6 +565,17 @@ namespace ModelBuilder
 
         private async void CreateSpiralProgrammatically(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
+#if false
+            double startingCenterRadius = 50;
+            double surfaceWidth = 12;
+            int angleStep = 30;
+            double spiralRatio = 1.0;
+            double spiralDelta = 10;
+            int totalAngle = 90;
+            double surfaceHeight = 3;
+            int surfaceTiltAngle = 0;
+            double dropAmount = 0;
+#else
             double startingCenterRadius = 50;
             double surfaceWidth = 12;
             int angleStep = 3;
@@ -574,6 +585,7 @@ namespace ModelBuilder
             double surfaceHeight = 3;
             int surfaceTiltAngle = 0;
             double dropAmount = 12;
+#endif
 
             var spiralBuilder = new SpiralBuilder(
                 startingCenterRadius,
