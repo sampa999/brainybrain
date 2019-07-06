@@ -39,6 +39,13 @@ namespace Models
             CreateSides();
         }
 
+        public Polygon[] RemoveTop()
+        {
+            var p = Top;
+            Top = new Polygon[0];
+            return p;
+        }
+
         private void CreateSides()
         {
             CreateTop();

@@ -33,9 +33,11 @@ namespace Models
             CreateSides();
         }
 
-        public void RemoveBottom()
+        public Polygon[] RemoveBottom()
         {
+            var p = BottomTrapezoids;
             BottomTrapezoids = new Polygon[0];
+            return p;
         }
 
         public void RemoveTopOutside()

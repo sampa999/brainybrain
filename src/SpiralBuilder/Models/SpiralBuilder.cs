@@ -279,29 +279,65 @@ namespace Models
                 innerLeftTop,
                 outerLeftTop));
 
-            var maxSteps = 180 / AngleStepDegrees;
-            for (var i = 1; i < maxSteps; i++)
+            var maxSteps = 360 / AngleStepDegrees;
+            //var maxSteps = 2;
+            for (var step = 1; step < maxSteps; step++)
             {
+                var currentTopWedge = Wedges[indexOfWedgeAbove + step];
+
+                var minZ = currentTopWedge.BottomTrapezoids[0].Vertices[0].Z;
+
+                foreach(var trap in currentTopWedge.BottomTrapezoids)
+                {
+                    foreach (var vert in trap.Vertices)
+                    {
+                        if (vert.Z < minZ)
+                        {
+                            minZ = vert.Z;
+                        }
+                    }
+                }
+
                 innerLeftBottom = innerRight;
                 outerLeftBottom = outerRight;
 
                 innerRight = new Vertex(
-                    Wedges[indexOfWedgeAbove+i].InnerRight.X,
-                    Wedges[indexOfWedgeAbove+i].InnerRight.Y,
+                    currentTopWedge.InnerRight.X,
+                    currentTopWedge.InnerRight.Y,
                     z);
 
                 outerRight = new Vertex(
-                    Wedges[indexOfWedgeAbove+i].OuterRight.X,
-                    Wedges[indexOfWedgeAbove+i].OuterRight.Y,
+                    currentTopWedge.OuterRight.X,
+                    currentTopWedge.OuterRight.Y,
                     z);
 
-                smallWedges.Add(new SmallWedge(
+                var surfaceHeight = SurfaceHeight;
+
+                var newWedge = new SmallWedge(
                     innerLeftBottom,
                     innerRight,
                     outerRight,
                     outerLeftBottom,
-                    SurfaceHeight));
+                    surfaceHeight);
+
+                if (newWedge.Top[0].Vertices[0].Z >= minZ)
+                {
+                    break;
+                }
+
+                if (step % 2 == 1)
+                {
+                    // Remove the top and bottom of the newWedge and currentTopWedge, respectively
+                    var newWedgeTop = newWedge.RemoveTop()[0];
+                    var currentTopWedgeBottom = currentTopWedge.RemoveBottom()[0];
+
+                    MakeConnectingPolygons(newWedgeTop, currentTopWedgeBottom);
+                }
+
+                smallWedges.Add(newWedge);
             }
+
+            // Add left connecting polygon
 
             foreach (var smallWedge in smallWedges)
             {
@@ -310,8 +346,63 @@ namespace Models
                 baseSupports.AddRange(smallWedge.Top);
                 baseSupports.AddRange(smallWedge.Bottom);
             }
+
             baseSupports.AddRange(smallWedges.Last().Right);
 
+        }
+
+        private void MakeConnectingPolygons(Polygon bottom, Polygon top)
+        {
+            if (bottom.Vertices.Length != 4)
+            {
+                throw new ArgumentOutOfRangeException(nameof(bottom), "collection must have 4 vertices");
+            }
+            if (top.Vertices.Length != 4)
+            {
+                throw new ArgumentOutOfRangeException(nameof(bottom), "collection must have 4 vertices");
+            }
+
+            // Inside?
+            baseSupports.Add(
+                new Polygon(
+                    bottom.Vertices[0],
+                    bottom.Vertices[1],
+                    top.Vertices[0],
+                    top.Vertices[1]));
+            // Right?
+            baseSupports.Add(
+                new Polygon(
+                    bottom.Vertices[1],
+                    bottom.Vertices[2],
+                    top.Vertices[3],
+                    top.Vertices[0]));
+            // Outside?
+            baseSupports.Add(
+                new Polygon(
+                    bottom.Vertices[2],
+                    bottom.Vertices[3],
+                    top.Vertices[2],
+                    top.Vertices[3]));
+            // Left?
+            baseSupports.Add(
+                new Polygon(
+                    bottom.Vertices[3],
+                    bottom.Vertices[0],
+                    top.Vertices[1],
+                    top.Vertices[2]));
+        }
+
+        private Vertex FindMatchingVertex(Vertex[] vertexSet, Vertex vertex)
+        {
+            foreach (var v in vertexSet)
+            {
+                if (v.X == vertex.X && v.Y == vertex.Y)
+                {
+                    return v;
+                }
+            }
+
+            return null;
         }
 
         private List<Polygon> baseSupports;

@@ -567,21 +567,21 @@ namespace ModelBuilder
         {
 #if false
             double startingCenterRadius = 50;
-            double surfaceWidth = 12;
+            double surfaceWidth = 10;
             int angleStep = 30;
             double spiralRatio = 1.0;
             double spiralDelta = 10;
-            int totalAngle = 90;
+            int totalAngle = 360*2;
             double surfaceHeight = 3;
             int surfaceTiltAngle = 0;
-            double dropAmount = 0;
+            double dropAmount = 10;
 #else
             double startingCenterRadius = 50;
             double surfaceWidth = 12;
             int angleStep = 3;
             double spiralRatio = 1.0;
             double spiralDelta = 10;
-            int totalAngle = 360*3;
+            int totalAngle = 360*4;
             double surfaceHeight = 3;
             int surfaceTiltAngle = 0;
             double dropAmount = 12;

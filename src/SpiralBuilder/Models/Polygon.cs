@@ -27,6 +27,11 @@ namespace Models
                 {
                     triangles.Add(new Triangle3d(Vertices[0], Vertices[1], Vertices[2]));
                 }
+                else if (Vertices.Length == 4)
+                {
+                    triangles.Add(new Triangle3d(Vertices[0], Vertices[1], Vertices[3]));
+                    triangles.Add(new Triangle3d(Vertices[3], Vertices[1], Vertices[2]));
+                }
                 else
                 {
                     var centerVertex = Vertex.Average(Vertices);
