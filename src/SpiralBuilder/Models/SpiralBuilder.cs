@@ -281,6 +281,9 @@ namespace Models
 
             var maxSteps = 360 / AngleStepDegrees;
             //var maxSteps = 2;
+
+            var surfaceHeight = SurfaceHeight;
+
             for (var step = 1; step < maxSteps; step++)
             {
                 var currentTopWedge = Wedges[indexOfWedgeAbove + step];
@@ -300,6 +303,8 @@ namespace Models
 
                 innerLeftBottom = innerRight;
                 outerLeftBottom = outerRight;
+                innerLeftTop = innerLeftBottom.Add(0, 0, surfaceHeight);
+                outerLeftTop = outerLeftBottom.Add(0, 0, surfaceHeight);
 
                 innerRight = new Vertex(
                     currentTopWedge.InnerRight.X,
@@ -311,14 +316,16 @@ namespace Models
                     currentTopWedge.OuterRight.Y,
                     z);
 
-                var surfaceHeight = SurfaceHeight;
+                surfaceHeight = 1;
 
                 var newWedge = new SmallWedge(
                     innerLeftBottom,
                     innerRight,
                     outerRight,
                     outerLeftBottom,
-                    surfaceHeight);
+                    surfaceHeight,
+                    innerLeftTop,
+                    outerLeftTop);
 
                 if (newWedge.Top[0].Vertices[0].Z >= minZ)
                 {
