@@ -316,7 +316,7 @@ namespace Models
                     currentTopWedge.OuterRight.Y,
                     z);
 
-                surfaceHeight = 1;
+                surfaceHeight = 0.1;
 
                 var newWedge = new SmallWedge(
                     innerLeftBottom,

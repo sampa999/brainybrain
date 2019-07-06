@@ -580,7 +580,7 @@ namespace ModelBuilder
             double surfaceWidth = 12;
             int angleStep = 3;
             double spiralRatio = 1.0;
-            double spiralDelta = 10;
+            double spiralDelta = 9;
             int totalAngle = 360*4;
             double surfaceHeight = 3;
             int surfaceTiltAngle = 0;

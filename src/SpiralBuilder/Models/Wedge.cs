@@ -68,7 +68,7 @@ namespace Models
         Vertex topVertex8;
         Vertex topVertex9;
 
-        Vertex dropZ = new Vertex(0, 0, 1);
+        Vertex dropZ = new Vertex(0, 0, 2);
 
         private void CreateTop()
         {
