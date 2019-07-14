@@ -21,7 +21,7 @@ namespace ModelTester
         {
             var p = new Polygon(new Vertex(0, 0, 0), new Vertex(0, 1, 0), new Vertex(1,1,0), new Vertex(1,0,0));
             var t = p.Triangles;
-            t.Length.Should().Be(4);
+            t.Length.Should().Be(2);
         }
     }
 }

@@ -9,6 +9,8 @@
     <Import_RootNamespace>_Models</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CylindricalSpiralBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CylindricalVertex.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Polygon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SmallWedge.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Trapezoid3d.cs" />

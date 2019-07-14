@@ -6,28 +6,18 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class Vertex : IComparable, IEquatable<Vertex>
+    public class CylindricalVertex : IComparable, IEquatable<CylindricalVertex>
     {
-        public Vertex(double x, double y, double z)
+        public CylindricalVertex(double radius, double phi, double z)
         {
-            X = Math.Round(x,5);
-            Y = Math.Round(y,5);
-            Z = Math.Round(z,5);
+            Radius = radius;
+            Phi = phi;
+            Z = z;
         }
 
-        public Vertex Add(double x, double y, double z)
+        public CylindricalVertex Add(double radius, double phi, double z)
         {
-            return new Vertex(X + x, Y + y, Z + z);
-        }
-
-        public static Vertex Average(Vertex v1, Vertex v2, double v2Weight)
-        {
-            return new Vertex
-            (
-                (v1.X + v2.X * v2Weight) / (1.0 + v2Weight),
-                (v1.Y + v2.Y * v2Weight) / (1.0 + v2Weight),
-                (v1.Z + v2.Z * v2Weight) / (1.0 + v2Weight)
-            );
+            return new CylindricalVertex(Radius + radius, (Phi + phi) % 360.0, Z + z);
         }
 
         public static Vertex Subtract(Vertex v1, Vertex v2)
@@ -74,28 +64,28 @@ namespace Models
             return new Vertex(x / count, y / count, z / count);
         }
 
-        public double X { get; private set; }
-        public double Y { get; private set; }
+        public double Radius { get; private set; }
+        public double Phi { get; private set; }
         public double Z { get; private set; }
 
         public int CompareTo(object obj)
         {
             Vertex v = (Vertex)obj;
 
-            if (v.X > X)
+            if (v.X > Radius)
             {
                 return 1;
             }
-            else if (v.X < X)
+            else if (v.X < Radius)
             {
                 return -1;
             }
 
-            if (v.Y > Y)
+            if (v.Y > Phi)
             {
                 return 1;
             }
-            else if (v.Y < Y)
+            else if (v.Y < Phi)
             {
                 return -1;
             }
@@ -112,7 +102,7 @@ namespace Models
             return 0;
         }
 
-        public bool Equals(Vertex other)
+        public bool Equals(CylindricalVertex other)
         {
             //Check whether the compared object is null. 
             if (other is null) return false;
@@ -121,17 +111,17 @@ namespace Models
             if (Object.ReferenceEquals(this, other)) return true;
 
             //Check whether the products' properties are equal. 
-            return X == other.X && Y == other.Y && Z == other.Z;
+            return Radius == other.Radius && Phi == other.Phi && Z == other.Z;
         }
 
         public override int GetHashCode()
         {
-            return X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode();
+            return Radius.GetHashCode() ^ Phi.GetHashCode() ^ Z.GetHashCode();
         }
 
         public override string ToString()
         {
-            return $"({X},{Y},{Z})";
+            return $"({Radius},{Phi},{Z})";
         }
     }
 }

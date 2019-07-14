@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Models
@@ -192,15 +193,10 @@ namespace Models
 
         }
 
-        public void AddBaseSupports()
+        private Vertex RemoveSquareAtBackOfTheRightsSideOfWedge(Wedge wedge)
         {
-            // Remove the square at the back of the right side of the last wedge
-            // Add a cube attached at that point, just for testing.
-
-            var lastWedge = Wedges.Last();
-            var rightPolygon = lastWedge.RightPolygons[0];
-            var leftPolygon = lastWedge.LeftPolygons[0];
-            var bottomPolygon = lastWedge.BottomTrapezoids[0];
+            var rightPolygon = wedge.RightPolygons[0];
+            var bottomPolygon = wedge.BottomTrapezoids[0];
 
             var newVert = new Vertex(
                 rightPolygon.Vertices[0].X,
@@ -216,7 +212,7 @@ namespace Models
                 newVert
                 );
 
-            lastWedge.RightPolygons[0] = newRightPolygon;
+            wedge.RightPolygons[0] = newRightPolygon;
 
             var newBottomPolygon = new Polygon(
                 bottomPolygon.Vertices[0],
@@ -226,23 +222,37 @@ namespace Models
                 newVert
                 );
 
-            lastWedge.BottomTrapezoids[0] = newBottomPolygon;
+            wedge.BottomTrapezoids[0] = newBottomPolygon;
 
-            var dx = rightPolygon.Vertices[6].X - leftPolygon.Vertices[5].X;
-            var dy = rightPolygon.Vertices[6].Y - leftPolygon.Vertices[5].Y;
+            return newVert;
+        }
+
+        public void AddBaseSupports()
+        {
+            // Remove the square at the back of the right side of the last wedge
+
+            var lastWedge = Wedges.Last();
+            var oldRightPolygon = lastWedge.RightPolygons[0];
+            var leftPolygon = lastWedge.LeftPolygons[0];
+            var newVert = RemoveSquareAtBackOfTheRightsSideOfWedge(lastWedge);
+            var rightPolygon = lastWedge.RightPolygons[0];
+            Debug.Assert(newVert == rightPolygon.Vertices.Last());
+
+            var dx = oldRightPolygon.Vertices[6].X - leftPolygon.Vertices[5].X;
+            var dy = oldRightPolygon.Vertices[6].Y - leftPolygon.Vertices[5].Y;
 
             // Create the vertices that will form the new box that contains the
             // now missing section of the right polygon
             var boxVertices = new Vertex[]
             {
                 newVert,
-                rightPolygon.Vertices[5],
-                rightPolygon.Vertices[6],
-                rightPolygon.Vertices[0],
+                oldRightPolygon.Vertices[5],
+                oldRightPolygon.Vertices[6],
+                oldRightPolygon.Vertices[0],
                 newVert.Add(dx, dy, 0),
-                rightPolygon.Vertices[5].Add(dx, dy, 0),
-                rightPolygon.Vertices[6].Add(dx, dy, 0),
-                rightPolygon.Vertices[0].Add(dx, dy, 0)
+                oldRightPolygon.Vertices[5].Add(dx, dy, 0),
+                oldRightPolygon.Vertices[6].Add(dx, dy, 0),
+                oldRightPolygon.Vertices[0].Add(dx, dy, 0)
             };
 
             var innerLeftBottom = boxVertices[0];
