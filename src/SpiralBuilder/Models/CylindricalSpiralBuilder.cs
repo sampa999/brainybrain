@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace _Models
+namespace Models
 {
     public class CylindricalSpiralBuilder
     {
@@ -36,6 +36,11 @@ namespace _Models
             SurfaceHeight = surfaceHeight;
             SurfaceTiltAngle = surfaceTiltAngle;
             DropAmount = dropAmount;
+        }
+
+        public void CreateRibbon()
+        {
+
         }
 
         private double CalculateStepSpiralRatio(double fullSpiralRatio)
@@ -74,5 +79,14 @@ namespace _Models
 
             return currentGuess;
         }
+
+        public List<Triangle3d> Triangles
+        {
+            get
+            {
+                return new List<Triangle3d>();
+            }
+        }
+
     }
 }

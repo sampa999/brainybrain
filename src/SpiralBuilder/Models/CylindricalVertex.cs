@@ -15,86 +15,53 @@ namespace Models
             Z = z;
         }
 
-        public CylindricalVertex Add(double radius, double phi, double z)
-        {
-            return new CylindricalVertex(Radius + radius, (Phi + phi) % 360.0, Z + z);
-        }
-
-        public static Vertex Subtract(Vertex v1, Vertex v2)
-        {
-            return new Vertex
-                (
-                v1.X - v2.X,
-                v1.Y - v2.Y,
-                v1.Z - v2.Z
-                );
-        }
-
-        public static Vertex Divide(Vertex v1, double v2)
-        {
-            return new Vertex(
-                v1.X / v2,
-                v1.Y / v2,
-                v1.Z / v2);
-        }
-
-        public static Vertex Multiply(Vertex v1, double v2)
-        {
-            return new Vertex(
-                v1.X * v2,
-                v1.Y * v2,
-                v1.Z * v2);
-        }
-
-        public static Vertex Average(params Vertex[] vertices)
-        {
-            double x = 0;
-            double y = 0;
-            double z = 0;
-            int count = 0;
-
-            foreach (var v in vertices)
-            {
-                x += v.X;
-                y += v.Y;
-                z += v.Z;
-                count++;
-            }
-
-            return new Vertex(x / count, y / count, z / count);
-        }
-
         public double Radius { get; private set; }
         public double Phi { get; private set; }
         public double Z { get; private set; }
 
+        public double X
+        {
+            get
+            {
+                return Math.Cos((double)Phi * Math.PI / 180.0) * Radius;
+            }
+        }
+
+        public double Y
+        {
+            get
+            {
+                return Math.Sin((double)Phi * Math.PI / 180.0) * Radius;
+            }
+        }
+
         public int CompareTo(object obj)
         {
-            Vertex v = (Vertex)obj;
-
-            if (v.X > Radius)
-            {
-                return 1;
-            }
-            else if (v.X < Radius)
-            {
-                return -1;
-            }
-
-            if (v.Y > Phi)
-            {
-                return 1;
-            }
-            else if (v.Y < Phi)
-            {
-                return -1;
-            }
+            var v = (CylindricalVertex)obj;
 
             if (v.Z > Z)
             {
                 return 1;
             }
             else if (v.Z < Z)
+            {
+                return -1;
+            }
+
+            if (v.Phi > Phi)
+            {
+                return 1;
+            }
+            else if (v.Phi < Phi)
+            {
+                return -1;
+            }
+
+            if (v.Radius > Radius)
+            {
+                return 1;
+            }
+            else if (v.Radius < Radius)
             {
                 return -1;
             }

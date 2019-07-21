@@ -579,9 +579,9 @@ namespace ModelBuilder
             double startingCenterRadius = 50;
             double surfaceWidth = 12;
             int angleStep = 3;
-            double spiralRatio = 1.0;
-            double spiralDelta = 9;
-            int totalAngle = 360*4;
+            double spiralRatio = 0.9;
+            double spiralDelta = 0;
+            int totalAngle = 360*10;
             double surfaceHeight = 3;
             int surfaceTiltAngle = 0;
             double dropAmount = 12;
@@ -661,6 +661,153 @@ namespace ModelBuilder
                 for (var i=0; i<triangleObject.Triangles.Length; i++)
                 {
                     indices[3 * i] = (uint) triangleObject.Triangles[i].Vertex[0];
+                    indices[3 * i + 1] = (uint)triangleObject.Triangles[i].Vertex[1];
+                    indices[3 * i + 2] = (uint)triangleObject.Triangles[i].Vertex[2];
+                }
+
+                var vertexData = indices.SelectMany(v => BitConverter.GetBytes(v)).ToArray();
+                await stream.WriteAsync(vertexData, 0, vertexData.Length);
+            }
+
+            var res = await mesh.VerifyAsync(Printing3DMeshVerificationMode.FindAllErrors);
+
+            if (!res.IsValid)
+            {
+                await SaveMeshToFile(mesh, res);
+            }
+
+            // add the mesh to the model
+            model.Meshes.Add(mesh);
+
+            if (!res.IsValid)
+            {
+                await model.RepairAsync();
+            }
+
+            // create a component.
+            Printing3DComponent component = new Printing3DComponent
+            {
+                Mesh = mesh
+            };
+
+            // Add the component to the model. A model can have multiple components.
+            model.Components.Add(component);
+
+            // The world matrix for the component is the identity matrix.
+            var componentWithMatrix = new Printing3DComponentWithMatrix() { Component = component, Matrix = Matrix4x4.Identity };
+
+            // add the componentWithMatrix to the build.
+            // The build defines what is to be printed from within a Printing3DModel.
+            // If you leave a mesh out of the build, it will not be printed.
+            model.Build.Components.Add(componentWithMatrix);
+
+            // Save the completed model into a package.
+            await package.SaveModelToPackageAsync(model);
+
+            currentPackage = package;
+
+            rootPage.NotifyUser("Package created programmatically.", NotifyType.StatusMessage);
+            EnablePackageOperationButtons();
+        }
+
+        private async void CreateCylindricalSpiralProgrammatically(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+#if false
+            double startingCenterRadius = 50;
+            double surfaceWidth = 10;
+            int angleStep = 30;
+            double spiralRatio = 1.0;
+            double spiralDelta = 10;
+            int totalAngle = 360*2;
+            double surfaceHeight = 3;
+            int surfaceTiltAngle = 0;
+            double dropAmount = 10;
+#else
+            double startingCenterRadius = 50;
+            double surfaceWidth = 12;
+            int angleStep = 3;
+            double spiralRatio = 1.0;
+            double spiralDelta = 9;
+            int totalAngle = 360 * 4;
+            double surfaceHeight = 3;
+            int surfaceTiltAngle = 0;
+            double dropAmount = 12;
+#endif
+
+            var spiralBuilder = new CylindricalSpiralBuilder(
+                startingCenterRadius,
+                surfaceWidth,
+                angleStep,
+                spiralRatio,
+                spiralDelta,
+                totalAngle,
+                surfaceHeight,
+                surfaceTiltAngle,
+                dropAmount);
+
+            spiralBuilder.CreateRibbon();
+
+            //spiralBuilder.AddSupports();
+
+            //spiralBuilder.AddBaseSupports();
+
+            //spiralBuilder.ExtractTriangles();
+
+            var triangleObject = new TriangleObject(spiralBuilder.Triangles.ToArray());
+
+            var package = new Printing3D3MFPackage();
+
+            var model = new Printing3DModel
+            {
+                Unit = Printing3DModelUnit.Millimeter
+            };
+
+            var mesh = new Printing3DMesh
+            {
+                VertexPositionsDescription = new Printing3DBufferDescription
+                {
+                    Format = Printing3DBufferFormat.Printing3DDouble,
+                    Stride = 3
+                },
+                VertexCount = (uint)triangleObject.Vertices.Length
+            };
+
+            // Create the buffer into which we will write the vertex positions.
+            mesh.CreateVertexPositions(sizeof(double) * mesh.VertexPositionsDescription.Stride * mesh.VertexCount);
+
+            // Fill the buffer with vertex coordinates.
+            using (var stream = mesh.GetVertexPositions().AsStream())
+            {
+                var vertices = new double[mesh.VertexCount * 3];
+                for (int i = 0; i < mesh.VertexCount; i++)
+                {
+                    vertices[3 * i] = triangleObject.Vertices[i].X;
+                    vertices[3 * i + 1] = triangleObject.Vertices[i].Y;
+                    vertices[3 * i + 2] = triangleObject.Vertices[i].Z;
+                }
+
+                byte[] vertexData = vertices.SelectMany(v => BitConverter.GetBytes(v)).ToArray();
+
+                await stream.WriteAsync(vertexData, 0, vertexData.Length);
+            }
+
+            mesh.IndexCount = (uint)triangleObject.Triangles.Length;
+            mesh.TriangleIndicesDescription = new Printing3DBufferDescription
+            {
+                Format = Printing3DBufferFormat.Printing3DUInt,
+                Stride = 3
+            };
+
+            // Create the buffer into which we will write the triangle vertex indices.
+            mesh.CreateTriangleIndices(sizeof(UInt32) * mesh.TriangleIndicesDescription.Stride * mesh.IndexCount);
+
+            // Fill the buffer with triangle vertex indices.
+            using (var stream = mesh.GetTriangleIndices().AsStream())
+            {
+                var indices = new UInt32[triangleObject.Triangles.Length * 3];
+                for (var i = 0; i < triangleObject.Triangles.Length; i++)
+                {
+                    indices[3 * i] = (uint)triangleObject.Triangles[i].Vertex[0];
                     indices[3 * i + 1] = (uint)triangleObject.Triangles[i].Vertex[1];
                     indices[3 * i + 2] = (uint)triangleObject.Triangles[i].Vertex[2];
                 }
