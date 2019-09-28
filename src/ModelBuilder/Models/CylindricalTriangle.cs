@@ -20,5 +20,17 @@ namespace Models
         }
 
         public List<CylindricalVertex> Vertices { get; set; }
+
+        public Triangle3d ToTriangle3d()
+        {
+            var vertices = new List<Vertex>();
+
+            foreach (var v in Vertices)
+            {
+                vertices.Add(new Vertex(v.X, v.Y, v.Z));
+            }
+
+            return new Triangle3d(vertices[0], vertices[1], vertices[2]);
+        }
     }
 }

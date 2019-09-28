@@ -8,6 +8,25 @@ namespace Models
 {
     public class CylindricalVertex : IComparable, IEquatable<CylindricalVertex>
     {
+        public static CylindricalVertex Average(List<CylindricalVertex> vertices)
+        {
+            double radius = 0;
+            double phi = 0;
+            double z = 0;
+            int count = 0;
+
+            foreach (var v in vertices)
+            {
+                radius += v.Radius;
+                phi += v.Phi;
+                z += v.Z;
+                count++;
+            }
+
+            return new CylindricalVertex(radius / count, phi / count, z / count);
+        }
+
+
         public CylindricalVertex(double radius, double phi, double z)
         {
             Radius = radius;

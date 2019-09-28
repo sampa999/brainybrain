@@ -11,6 +11,7 @@
 
 using Models;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -724,34 +725,41 @@ namespace ModelBuilder
             double dropAmount = 10;
 #else
             double startingCenterRadius = 50;
-            double surfaceWidth = 12;
-            int angleStep = 3;
+            int angleStep = 30;
             double spiralRatio = 1.0;
-            double spiralDelta = 9;
-            int totalAngle = 360 * 4;
-            double surfaceHeight = 3;
-            int surfaceTiltAngle = 0;
-            double dropAmount = 12;
+            double spiralDelta = 1.0;
+            int totalAngle = 30;
+            double riseAmountPerRotation = 0;
 #endif
+            var profileVertices =
+            new List<CylindricalVertex>
+                {
+                    new CylindricalVertex(0, 0, 0),
+                    new CylindricalVertex(0,0,10),
+                    new CylindricalVertex(10,0,13),
+                    new CylindricalVertex(10,0,3)
+                };
+
+            CylindricalPolygon profile = new CylindricalPolygon(
+                profileVertices
+            );
 
             var spiralBuilder = new CylindricalSpiralBuilder(
+                profile,
                 startingCenterRadius,
-                surfaceWidth,
                 angleStep,
                 spiralRatio,
                 spiralDelta,
                 totalAngle,
-                surfaceHeight,
-                surfaceTiltAngle,
-                dropAmount);
+                riseAmountPerRotation);
 
-            spiralBuilder.CreateRibbon();
+            spiralBuilder.CreateRibbonPolygons();
 
             //spiralBuilder.AddSupports();
 
             //spiralBuilder.AddBaseSupports();
 
-            //spiralBuilder.ExtractTriangles();
+            spiralBuilder.ExtractTriangles();
 
             var triangleObject = new TriangleObject(spiralBuilder.Triangles.ToArray());
 
@@ -826,10 +834,10 @@ namespace ModelBuilder
             // add the mesh to the model
             model.Meshes.Add(mesh);
 
-            if (!res.IsValid)
-            {
-                await model.RepairAsync();
-            }
+            //if (!res.IsValid)
+            //{
+            //    await model.RepairAsync();
+            //}
 
             // create a component.
             Printing3DComponent component = new Printing3DComponent
