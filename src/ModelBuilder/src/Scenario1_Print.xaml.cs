@@ -713,31 +713,28 @@ namespace ModelBuilder
 
         private async void CreateCylindricalSpiralProgrammatically(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-#if false
+#if falsse
             double startingCenterRadius = 50;
-            double surfaceWidth = 10;
-            int angleStep = 30;
+            int angleStep = 90;
             double spiralRatio = 1.0;
-            double spiralDelta = 10;
-            int totalAngle = 360*2;
-            double surfaceHeight = 3;
-            int surfaceTiltAngle = 0;
-            double dropAmount = 10;
+            double spiralDelta = 0;
+            int totalAngle = 90;
+            double riseAmountPerRotation = 0;
 #else
             double startingCenterRadius = 50;
-            int angleStep = 30;
+            int angleStep = 1;
             double spiralRatio = 1.0;
-            double spiralDelta = 1.0;
-            int totalAngle = 30;
-            double riseAmountPerRotation = 0;
+            double spiralDelta = 5;
+            int totalAngle = 360*10;
+            double riseAmountPerRotation = 10;
 #endif
             var profileVertices =
             new List<CylindricalVertex>
                 {
                     new CylindricalVertex(0, 0, 0),
-                    new CylindricalVertex(0,0,10),
-                    new CylindricalVertex(10,0,13),
-                    new CylindricalVertex(10,0,3)
+                    new CylindricalVertex(10,0,2),
+                    new CylindricalVertex(10,0,7),
+                    new CylindricalVertex(0,0,5)
                 };
 
             CylindricalPolygon profile = new CylindricalPolygon(

@@ -30,20 +30,23 @@ namespace Models
 
                 var triangles = new List<CylindricalTriangle>();
 
-                for (var i=1; i<Vertices.Count; i++)
-                {
-                    triangles.Add(
-                        new CylindricalTriangle(
-                            Vertices[i - 1], 
-                            Vertices[i], 
-                            centerVertex));
-                }
+                //for (var i=1; i<Vertices.Count; i++)
+                //{
+                //    triangles.Add(
+                //        new CylindricalTriangle(
+                //            Vertices[i - 1], 
+                //            Vertices[i], 
+                //            centerVertex));
+                //}
 
-                triangles.Add(
-                    new CylindricalTriangle(
-                        Vertices.Last(),
-                        Vertices[0],
-                        centerVertex));
+                //triangles.Add(
+                //    new CylindricalTriangle(
+                //        Vertices.Last(),
+                //        Vertices[0],
+                //        centerVertex));
+
+                triangles.Add(new CylindricalTriangle(Vertices[0], Vertices[1], Vertices[2]));
+                triangles.Add(new CylindricalTriangle(Vertices[0], Vertices[2], Vertices[3]));
 
                 return triangles;
             }

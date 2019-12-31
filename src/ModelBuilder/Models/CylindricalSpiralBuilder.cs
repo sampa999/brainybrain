@@ -78,19 +78,19 @@ namespace Models
                     new List<CylindricalVertex>
                     {
                         left.Vertices[0],
-                        left.Vertices[1],
+                        right.Vertices[0],
                         right.Vertices[1],
-                        right.Vertices[0]
+                        left.Vertices[1],
                     });
                 cylindricalTriangles.AddRange(inside.Triangles);
 
                 var top = new CylindricalPolygon(
                     new List<CylindricalVertex>
                     {
-                        left.Vertices[1],
-                        left.Vertices[2],
+                        right.Vertices[1],
                         right.Vertices[2],
-                        right.Vertices[1]
+                        left.Vertices[2],
+                        left.Vertices[1],
                     });
                 cylindricalTriangles.AddRange(top.Triangles);
 
@@ -98,19 +98,19 @@ namespace Models
                     new List<CylindricalVertex>
                     {
                         left.Vertices[2],
-                        left.Vertices[3],
+                        right.Vertices[2],
                         right.Vertices[3],
-                        right.Vertices[2]
+                        left.Vertices[3],
                     });
                 cylindricalTriangles.AddRange(outside.Triangles);
 
                 var bottom = new CylindricalPolygon(
                     new List<CylindricalVertex>
                     {
-                        left.Vertices[3],
                         left.Vertices[0],
+                        left.Vertices[3],
+                        right.Vertices[3],
                         right.Vertices[0],
-                        right.Vertices[3]
                     });
                 cylindricalTriangles.AddRange(bottom.Triangles);
             }
