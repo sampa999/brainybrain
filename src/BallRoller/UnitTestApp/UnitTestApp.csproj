@@ -156,7 +156,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\ModelBuilder.csproj">
+    <ProjectReference Include="..\MainUI\MainUI.csproj">
       <Project>{3b2608e4-f417-51a7-bffe-72cea697161c}</Project>
       <Name>ModelBuilder</Name>
     </ProjectReference>
